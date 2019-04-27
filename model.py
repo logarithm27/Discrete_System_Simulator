@@ -67,6 +67,4 @@ class Simulator:
                                   'clock': self.min_clock_y_star,
                                   'date': self.next_event_date_t_prime})
 
-if __name__ == '__main__':
-    simulator = Simulator()
 
