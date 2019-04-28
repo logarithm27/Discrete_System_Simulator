@@ -39,9 +39,9 @@ class Input:
     def set_of_possible_events_of_all_states(self):
         for state in self.states:
             self.sigma[state] = []
-        for states in self.state_machine['transitions']:
-            self.sigma[states['source']].append(states['event'])
-            self.sigma[states['destination']].append(states['event'])
+        for transition in self.state_machine['transitions']:
+            self.sigma[transition['source']].append(transition['event'])
+            self.sigma[transition['destination']].append(transition['event'])
         for state in self.sigma:
             self.sigma[state] = sorted(list(dict.fromkeys(self.sigma[state])))  # remove duplicates
 
