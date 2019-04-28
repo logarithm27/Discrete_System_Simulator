@@ -5,17 +5,12 @@ class Simulator:
     def __init__(self):
         self.user_input = Input()
         self.sigma = self.user_input.sigma
-        self.current_state = self.user_input.state_machine['initial_state']
         self.next_state_x_prime = None
-        self.current_event = None
         self.next_event_e_prime = None
         self.min_clock_y_star = 0
         self.initial_event_date_t_previous = 0
         self.next_event_date_t_prime = 0
-        self.next_clock_value = 0
         self.duration = self.user_input.set_of_durations
-        self.duration_buffer = self.duration
-        self.min_clock_for_event = {}
         self.calender = []
         self.last_clock_pop = {}
         self.simulate()
@@ -30,19 +25,13 @@ class Simulator:
     def still_active(self, event, state):
         return event in self.sigma[state]
 
-    def get_min_y_star_and_arg_event(self):
-        for event in self.user_input.set_of_durations:
-            v = self.duration[event].pop(0)
-            self.min_clock_for_event[event] = v  # get the first value in the set of clocks for each event
-            self.last_clock_pop[event] = v
-        return sorted(self.min_clock_for_event.items(), key=lambda event_y_star: (event_y_star[1], event_y_star[0]))  #sort by y*
-
-    def get_min_y_star_and_arg_event_2(self, active_events):
+    def get_min_y_star_and_arg_event(self, active_events):
+        ordered_events_by_clock_value = {}
         for event in active_events:
             v = self.duration[event].pop(0)
-            self.min_clock_for_event[event] = v # get the first value in the set of clocks for each event
+            ordered_events_by_clock_value[event] = v # get the first value in the set of clocks for each event
             self.last_clock_pop[event] = v
-        return sorted(self.min_clock_for_event.items(), key=lambda event_y_star: (event_y_star[1], event_y_star[0]))  #sort by y*
+        return sorted(ordered_events_by_clock_value.items(), key=lambda event_y_star: (event_y_star[1], event_y_star[0]))  #sort by y*
 
     def simulate(self):
         counter = 0
@@ -57,9 +46,9 @@ class Simulator:
             active_events = self.sigma[last_state]
             get_y_star_and_arg = None
             if len(active_events) == len(self.user_input.events):
-                get_y_star_and_arg = self.get_min_y_star_and_arg_event()
+                get_y_star_and_arg = self.get_min_y_star_and_arg_event(self.user_input.set_of_durations)
             if len(self.user_input.events) > len(active_events) :
-                get_y_star_and_arg = self.get_min_y_star_and_arg_event_2(active_events)
+                get_y_star_and_arg = self.get_min_y_star_and_arg_event(active_events)
             self.min_clock_y_star = get_y_star_and_arg[0][1]  # get value which is a y*
             self.next_event_e_prime = get_y_star_and_arg[0][0]  # get key (arg which is an event )
             self.next_state_x_prime = self.next_state(last_state, self.next_event_e_prime)
