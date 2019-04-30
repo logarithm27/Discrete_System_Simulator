@@ -20,21 +20,19 @@ class Example(Frame):
         simulator = Simulator()
         calender = simulator.calender
         steps = {}
-        canvas.create_line(20, 200, 870, 200)
+        canvas.create_line(20, 200, 970, 200)
 
         i = 20
-        step = -0.5
-        while i <= 770:
-            step +=0.5
-            if i%2 == 0:
-                canvas.create_line(i,205,i,195)
-                canvas.create_text(i,215, text=step, font='Helvetica 9 bold')
-                steps[step] = [i,205,195]
-            if i%2 != 0:
-                canvas.create_line(i,202,i,197)
-                canvas.create_text(i,215, text=step)
-                steps[step] = [i,202,197]
-            i += 75
+        step = -0.1
+        while i <= 970:
+            step +=0.1
+            checker = step/0.5
+            if step >= 1:
+                    if checker % int(checker) == 0: # draw step only if it's one step or half step
+                        canvas.create_line(i,205,i,195)
+            steps[round(step,1)] = [i,205,195]
+            i += 15.5
+
         for i,c in enumerate(calender):
                 current_event_date = calender[i]['date']
                 if i+1 < len(calender):
@@ -47,6 +45,8 @@ class Example(Frame):
                 if c['event'] is not None :
                     canvas.create_line(steps[current_event_date][0],190,steps[current_event_date][0],160, arrow = tk.FIRST)
                     canvas.create_text(steps[current_event_date][0],150, text= 'event ' + str(i) +" = " + str(c['event']), font='Helvetica 9 bold')
+                    canvas.create_text(steps[current_event_date][0],215, text = str(current_event_date), font ='Helvetica 9 bold')
+                    canvas.create_line(steps[current_event_date][0],205,steps[current_event_date][0],195)
         y = 360
         for state in simulator.gamma:
             canvas.create_text(50,y, text = "\u0393" + "(" +str(state)+ ") = "+"{"+str(simulator.gamma[state]).replace('[','').replace(']','')+"}",

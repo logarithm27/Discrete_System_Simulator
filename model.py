@@ -15,7 +15,7 @@ class Simulator:
         self.calender = []
         self.last_clock_pop = {}
         self.occurrence = int(sum(self.user_input.set_of_durations[next(iter(self.user_input.set_of_durations))]))
-        self.simulate_simple_way()
+        self.simulate()
         for c in self.calender:
             print(c)
 
