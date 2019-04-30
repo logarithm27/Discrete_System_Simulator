@@ -17,3 +17,10 @@ def asking_for_input(ask_for_number_of_data, ask_for_data):
         print('invalid input, try again')
         return None
     return data
+
+def sort_by_date(dictionary):
+    ordered = sorted(dictionary.items(), key = lambda event__date: (event__date[1], event__date[0]))
+    dictionary = {}
+    for tup in ordered:
+        dictionary[tup[0]] = tup[1]
+    return dictionary

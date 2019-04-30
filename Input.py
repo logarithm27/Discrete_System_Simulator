@@ -11,7 +11,7 @@ class Input:
         while self.events is None:
             self.events = asking_for_input("How many events : ", "Put events separated by semicolon : ")
         self.state_machine = self.build_state_machine()
-        self.sigma = {}
+        self.gamma = {}
         self.set_of_possible_events_of_all_states()
         self.set_of_durations = {}  # may be random
         self.durations_input(False)
@@ -38,12 +38,12 @@ class Input:
 
     def set_of_possible_events_of_all_states(self):
         for state in self.states:
-            self.sigma[state] = []
+            self.gamma[state] = []
         for transition in self.state_machine['transitions']:
-            self.sigma[transition['source']].append(transition['event'])
-            self.sigma[transition['destination']].append(transition['event'])
-        for state in self.sigma:
-            self.sigma[state] = sorted(list(dict.fromkeys(self.sigma[state])))  # remove duplicates
+            self.gamma[transition['source']].append(transition['event'])
+            self.gamma[transition['destination']].append(transition['event'])
+        for state in self.gamma:
+            self.gamma[state] = sorted(list(dict.fromkeys(self.gamma[state])))  # remove duplicates
 
     def durations_input(self, random):
         if not random:
@@ -56,5 +56,5 @@ class Input:
     def print_data(self):
         print(self.states)
         print(self.events)
-        print(self.sigma)
+        print(self.gamma)
         print(self.set_of_durations)
