@@ -15,7 +15,7 @@ class Simulator:
         self.calender = []
         self.last_clock_pop = {}
         self.occurrence = int(sum(self.user_input.set_of_durations[next(iter(self.user_input.set_of_durations))]))
-        self.simulate()
+        self.simulate_simple_way()
         for c in self.calender:
             print(c)
 
@@ -35,6 +35,12 @@ class Simulator:
             self.last_clock_pop[event] = v
         return sorted(ordered_events_by_clock_value.items(), key=lambda event__y_star: (event__y_star[1], event__y_star[0]))  #sort by y*
 
+    def still_more_clocks(self):
+        for event in self.duration:
+            if self.duration[event]:
+                return True
+        return False
+
     # without updating the clock value each time
     def simulate_simple_way(self):
         counter = 0
@@ -42,7 +48,7 @@ class Simulator:
         self.calender.append(
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': None, 'date': self.initial_event_date_t_previous})
-        while counter < self.occurrence:
+        while self.still_more_clocks():
             last_state = self.calender[-1]['next_state']
             active_events = self.gamma[last_state]
             for event in active_events:
