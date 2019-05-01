@@ -49,19 +49,19 @@ class Simulator:
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': None, 'date': self.initial_event_date_t_previous})
         while self.still_more_clocks():
-            last_state = self.calender[-1]['next_state']
-            active_events = self.gamma[last_state]
+            current_state = self.calender[-1]['next_state']
+            active_events = self.gamma[current_state]
             for event in active_events:
                 if self.duration[event]:
                     ordered_events_by_date[event] = self.initial_event_date_t_previous + self.duration[event].pop(0)
             ordered_events_by_date = sort_by_date(ordered_events_by_date)
             for event in self.user_input.events:
-                if not self.still_active(event,last_state):
+                if not self.still_active(event,current_state):
                     ordered_events_by_date.pop(event)
             self.next_event_e_prime = next(iter(ordered_events_by_date))
             self.next_event_date_t_prime = ordered_events_by_date[self.next_event_e_prime]
             self.initial_event_date_t_previous = self.next_event_date_t_prime
-            self.next_state_x_prime = self.next_state(last_state, self.next_event_e_prime)
+            self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
             ordered_events_by_date.pop(self.next_event_e_prime)
             self.calender.append(
                 {'event': self.next_event_e_prime, 'next_state': self.next_state_x_prime,
@@ -75,8 +75,8 @@ class Simulator:
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': 0.0, 'date': self.initial_event_date_t_previous})
         while self.still_more_clocks():
-            last_state = self.calender[-1]['next_state']
-            active_events = self.gamma[last_state]
+            current_state = self.calender[-1]['next_state']
+            active_events = self.gamma[current_state]
             get_y_star_and_arg = None
             if len(active_events) == len(self.user_input.events):
                 get_y_star_and_arg = self.get_min_y_star_and_arg_event(self.user_input.set_of_durations)
@@ -84,10 +84,10 @@ class Simulator:
                 get_y_star_and_arg = self.get_min_y_star_and_arg_event(active_events)
             self.min_clock_y_star = get_y_star_and_arg[0][1]  # get value which is a y*
             self.next_event_e_prime = get_y_star_and_arg[0][0]  # get key (arg which is an event )
-            self.next_state_x_prime = self.next_state(last_state, self.next_event_e_prime)
+            self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
             next_possible_events = self.gamma[self.next_state_x_prime]
             for possible_event in next_possible_events:
-                if possible_event != self.next_event_e_prime and self.still_active(possible_event, last_state):
+                if possible_event != self.next_event_e_prime and self.still_active(possible_event, current_state):
                     if len(self.duration[possible_event]) == 0:
                         self.duration[possible_event].append(self.last_clock_pop[possible_event] - self.min_clock_y_star)
                     elif len(self.duration[possible_event]) > 0:
