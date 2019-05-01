@@ -15,7 +15,7 @@ class Simulator:
         self.calender = []
         self.last_clock_pop = {}
         self.occurrence = int(sum(self.user_input.set_of_durations[next(iter(self.user_input.set_of_durations))]))
-        self.simulate_simple_way()
+        self.simulate()
         for c in self.calender:
             print(c)
 
@@ -74,7 +74,7 @@ class Simulator:
         self.calender.append(
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': 0.0, 'date': self.initial_event_date_t_previous})
-        while counter < self.occurrence:
+        while self.still_more_clocks():
             last_state = self.calender[-1]['next_state']
             active_events = self.gamma[last_state]
             get_y_star_and_arg = None
