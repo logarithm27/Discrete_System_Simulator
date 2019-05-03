@@ -55,14 +55,14 @@ class Simulator:
                 if self.duration[event]:
                     ordered_events_by_date[event] = self.initial_event_date_t_previous + self.duration[event].pop(0)
             ordered_events_by_date = sort_by_date(ordered_events_by_date)
-            for event in self.user_input.events:
-                if not self.still_active(event,current_state):
-                    ordered_events_by_date.pop(event)
             self.next_event_e_prime = next(iter(ordered_events_by_date))
             self.next_event_date_t_prime = ordered_events_by_date[self.next_event_e_prime]
             self.initial_event_date_t_previous = self.next_event_date_t_prime
             self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
             ordered_events_by_date.pop(self.next_event_e_prime)
+            for event in self.user_input.events:
+                if not self.still_active(event,self.next_state_x_prime):
+                    ordered_events_by_date.pop(event)
             self.calender.append(
                 {'event': self.next_event_e_prime, 'next_state': self.next_state_x_prime,
                  'clock': None, 'date': self.next_event_date_t_prime})
