@@ -55,10 +55,10 @@ class Example(Frame):
                                font = 'Helvetica 10 bold' )
             y += 18
         y +=18
-        canvas.create_text(90, y, text= "E (set of events) = " + "{" + str(simulator.user_input.events).replace('[','').replace(']','')+"}",
+        canvas.create_text(90, y, text= "E (set of events) = "+ str(simulator.user_input.events).replace('[','').replace(']',''),
                            font = 'Helvetica 10 bold')
         y +=18
-        canvas.create_text(90, y, text= "X (set of states) = " + "{" + str(simulator.user_input.states).replace('[','').replace(']','')+"}",
+        canvas.create_text(90, y, text= "X (set of states) = " + str(simulator.user_input.states).replace('[','').replace(']',''),
                            font = 'Helvetica 10 bold')
 
         canvas.pack(fill=BOTH, expand=1)
