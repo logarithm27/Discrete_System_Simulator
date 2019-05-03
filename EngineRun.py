@@ -28,8 +28,10 @@ class Example(Frame):
             step +=0.1
             checker = step/0.5
             if step >= 1:
-                    if checker % int(checker) == 0: # draw step only if it's one step or half step
+                    if round(checker,2) % int(checker) == 0: # draw step only if it's one step or half step
                         canvas.create_line(i,205,i,195)
+            if step == 0.0 or step == 0.5:
+                canvas.create_line(i,205,i,195)
             steps[round(step,1)] = [i,205,195]
             i += 15.5
 
