@@ -48,19 +48,25 @@ class Simulator:
         self.calender.append(
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': None, 'date': self.initial_event_date_t_previous})
+        # if there we still have clock values on the durations list
         while self.still_more_clocks():
+            # get the current state from the last added state from the calender dictionary
             current_state = self.calender[-1]['next_state']
+            # get the possible active events by passing the current state inside the gamma function
             active_events = self.gamma[current_state]
+            # looping through the active events
             for event in active_events:
-                if self.duration[event]:
-                    ordered_events_by_date[event] = self.initial_event_date_t_previous + self.duration[event].pop(0)
+                if event not in ordered_events_by_date:
+                    if self.duration[event]:
+                        ordered_events_by_date[event] = self.initial_event_date_t_previous + self.duration[event].pop(0)
             ordered_events_by_date = sort_by_date(ordered_events_by_date)
             self.next_event_e_prime = next(iter(ordered_events_by_date))
             self.next_event_date_t_prime = ordered_events_by_date[self.next_event_e_prime]
             self.initial_event_date_t_previous = self.next_event_date_t_prime
             self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
             ordered_events_by_date.pop(self.next_event_e_prime)
-            for event in self.user_input.events:
+            events = list(ordered_events_by_date.keys())
+            for event in events:
                 if not self.still_active(event,self.next_state_x_prime):
                     ordered_events_by_date.pop(event)
             self.calender.append(
