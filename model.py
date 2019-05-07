@@ -14,8 +14,11 @@ class Simulator:
         self.duration = self.user_input.set_of_durations
         self.calender = []
         self.last_clock_pop = {}
-        self.occurrence = int(sum(self.user_input.set_of_durations[next(iter(self.user_input.set_of_durations))]))
-        self.simulate_simple_way()
+        which_method = self.user_input.method_input()
+        if which_method == "simple":
+            self.simulate_simple_way()
+        elif which_method == "hard":
+            self.simulate()
         for c in self.calender:
             print(c)
 
@@ -30,9 +33,10 @@ class Simulator:
     def get_min_y_star_and_arg_event(self, active_events):
         ordered_events_by_clock_value = {}
         for event in active_events:
-            v = self.duration[event].pop(0)
-            ordered_events_by_clock_value[event] = v # get the first value in the set of clocks for each event
-            self.last_clock_pop[event] = v
+            if self.duration[event]:
+                v = self.duration[event].pop(0)
+                ordered_events_by_clock_value[event] = v # get the first value in the set of clocks for each event
+                self.last_clock_pop[event] = v
         return sorted(ordered_events_by_clock_value.items(), key=lambda event__y_star: (event__y_star[1], event__y_star[0]))  #sort by y*
 
     def still_more_clocks(self):

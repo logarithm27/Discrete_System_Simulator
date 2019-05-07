@@ -53,6 +53,12 @@ class Input:
                 except None or SyntaxError or ValueError:
                     self.durations_input(random)
 
+    def method_input(self):
+        simple_way_or_other_way = input("Simulate by using calculation (enter y ) or without (enter n): ")
+        if simple_way_or_other_way == "y".lower():
+            return "hard"
+        else:
+            return "simple"
     def print_data(self):
         print(self.states)
         print(self.events)
