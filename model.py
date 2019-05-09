@@ -67,9 +67,13 @@ class Simulator:
             # get the possible active events by passing the current state inside the gamma function
             active_events = self.gamma[current_state]
             # looping through the active events
+            self.steps.append("("+current_state+")" +
+                              "is the current state"+'\n')
+            self.steps.append("active events for current state : "+"Gamma"+"("+current_state+")=" +
+                              str(active_events)+'\n')
             for event in active_events:
                 if not self.duration[event]:
-                    self.steps.append("{"+event+"}" +
+                    self.steps.append("the {"+event+"}" +
                                       " event is active, but all corresponding clocks are already used "+'\n')
                 if event not in ordered_events_by_date: # if the event is not already on the ordered list
                     if self.duration[event]:
