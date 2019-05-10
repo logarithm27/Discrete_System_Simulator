@@ -94,7 +94,9 @@ class Simulator:
             self.steps.append("t' = " + str(self.initial_event_date_t_previous)+"\n")
             self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
             ordered_events_by_date.pop(self.next_event_e_prime)
+            # get all events except the trigger event that are available on the ordered list
             events = list(ordered_events_by_date.keys())
+            # for every active events in the current state, test if this will be active on the next state, if it's not then remove it
             for event in events:
                 if not self.still_active(event,self.next_state_x_prime):
                     ordered_events_by_date.pop(event)
