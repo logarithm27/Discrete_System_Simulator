@@ -13,14 +13,21 @@ class InfiniteModelInput:
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
-        # X for states, and V's (set of clocks) consistent with the corresponding given E
+        # X for set of states, and V's (set of clocks) consistent with the corresponding given E
         # and n for the number of states in the model
         skeleton_of_model = []
         for single_content in self.contents:
             if "#" in single_content:
                 pass
-            skeleton_of_model.append(single_content.pop(0))
-        
+            # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
+            data = ""
+            for single_character in single_content:
+                if single_character != "=":
+                    data += single_character
+                    skeleton_of_model.append(data)
+                elif single_character == "=":
+                    break
+
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
