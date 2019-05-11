@@ -59,6 +59,8 @@ class Input:
             return "hard"
         else:
             return "simple"
+
+
     def print_data(self):
         print(self.states)
         print(self.events)

@@ -24,3 +24,16 @@ def sort_by_date(dictionary):
     for tup in ordered:
         dictionary[tup[0]] = tup[1]
     return dictionary
+
+
+def asking_for_input_infinite_models():
+    ask_for_file = input("Put the file that contains model description : ")
+    try:
+        with open(ask_for_file) as file:
+            contents = file.readlines()
+            # you may also want to remove whitespace characters like `\n` at the end of each line
+        contents = [line.strip() for line in contents]
+        return contents
+    except IOError:
+        print("file doesn't exists, try again")
+        return None
