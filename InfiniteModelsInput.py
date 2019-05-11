@@ -28,8 +28,9 @@ class InfiniteModelInput:
                 elif single_character == "=":
                     break
         if "X" not in skeleton_of_model or "x" not in skeleton_of_model:
-            print("Invalid Description, put states of your model and try again")
-        if "E"
+            print("Invalid description, put states of your model and try again")
+        if "E" not in skeleton_of_model or "e" not in skeleton_of_model:
+            print("Invalid description, put events")
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
