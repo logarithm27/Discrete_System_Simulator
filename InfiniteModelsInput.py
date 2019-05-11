@@ -30,7 +30,7 @@ class InfiniteModelInput:
                     break
         if "X" not in skeleton_of_model or "x" not in skeleton_of_model:
             print("Invalid description, put states of your model and try again")
-        if "E" not in skeleton_of_model or "e" not in skeleton_of_model:
+        if self.extracting_events_from_description_file().__eq__(None):
             print("Invalid description, put events of your model and try again")
         if "V" in skeleton_of_model or "v" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
