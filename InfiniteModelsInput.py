@@ -13,7 +13,7 @@ class InfiniteModelInput:
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
-        # X for set of states, and V's (set of clocks) consistent with the corresponding given E
+        # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
         # and n for the number of states in the model
         skeleton_of_model = []
         for single_content in self.contents:
