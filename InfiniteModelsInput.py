@@ -16,7 +16,7 @@ class InfiniteModelInput:
         # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
         # and n for the number of states in the model
         skeleton_of_model = []
-        how_many_durations = []
+        how_many_durations = 0
         for single_content in self.contents:
             if "#" in single_content:
                 pass
@@ -24,7 +24,7 @@ class InfiniteModelInput:
             data = ""
             for single_character in single_content:
                 if single_character != "=":
-                    data += single_character
+                    data += str(single_character)
                     skeleton_of_model.append(data)
                 elif single_character == "=":
                     break
@@ -32,7 +32,11 @@ class InfiniteModelInput:
             print("Invalid description, put states of your model and try again")
         if "E" not in skeleton_of_model or "e" not in skeleton_of_model:
             print("Invalid description, put events of your model and try again")
-
+        if "V" in skeleton_of_model or "v" in skeleton_of_model:
+            for element_of_model in skeleton_of_model:
+                if element_of_model.casefold().__eq__("V".casefold()):
+                    how_many_durations += 1
+            if
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
@@ -40,6 +44,7 @@ class InfiniteModelInput:
                 split_string = single_content.replace("{","").replace("}","").replace("E","").replace("e","").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for event in split_string:
                     self.events.append(event)
+        return self.events
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
