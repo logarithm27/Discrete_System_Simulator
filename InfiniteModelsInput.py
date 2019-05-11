@@ -36,7 +36,10 @@ class InfiniteModelInput:
             for element_of_model in skeleton_of_model:
                 if element_of_model.casefold().__eq__("V".casefold()):
                     how_many_durations += 1
-            if
+            if "E" in skeleton_of_model or "e" in skeleton_of_model:
+                if len(self.extracting_description_from_file()) != how_many_durations:
+                    print("Invalid description, you should put the set of clocks that are consistent with the set of events")
+
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
