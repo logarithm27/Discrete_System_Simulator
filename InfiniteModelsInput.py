@@ -27,11 +27,13 @@ class InfiniteModelInput:
                     skeleton_of_model.append(data)
                 elif single_character == "=":
                     break
-
+        if "X" not in skeleton_of_model or "x" not in skeleton_of_model:
+            print("Invalid Description, put states of your model and try again")
+        if "E"
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
-            if "E" in single_content or "e" in single_content:
+            if "E".casefold() in single_content.casefold():
                 split_string = single_content.replace("{","").replace("}","").replace("E","").replace("e","").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for event in split_string:
                     self.events.append(event)
