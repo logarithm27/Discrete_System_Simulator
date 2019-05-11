@@ -37,17 +37,20 @@ class InfiniteModelInput:
                 if element_of_model.casefold().__eq__("V".casefold()):
                     how_many_durations += 1
             if "E" in skeleton_of_model or "e" in skeleton_of_model:
-                if len(self.extracting_description_from_file()) != how_many_durations:
+                if len(self.extracting_events_from_description_file()) != how_many_durations:
                     print("Invalid description, you should put the set of clocks that are consistent with the set of events")
 
 
-    def extracting_description_from_file(self):
+    def extracting_events_from_description_file(self):
+        events = []
         for single_content in self.contents:
             if "E".casefold() in single_content.casefold():
                 split_string = single_content.replace("{","").replace("}","").replace("E","").replace("e","").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for event in split_string:
-                    self.events.append(event)
-        return self.events
+                    events.append(event)
+        if events:
+            return events
+        return None
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
