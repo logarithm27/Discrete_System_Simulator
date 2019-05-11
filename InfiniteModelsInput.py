@@ -16,6 +16,7 @@ class InfiniteModelInput:
         # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
         # and n for the number of states in the model
         skeleton_of_model = []
+        how_many_durations = []
         for single_content in self.contents:
             if "#" in single_content:
                 pass
@@ -30,7 +31,8 @@ class InfiniteModelInput:
         if "X" not in skeleton_of_model or "x" not in skeleton_of_model:
             print("Invalid description, put states of your model and try again")
         if "E" not in skeleton_of_model or "e" not in skeleton_of_model:
-            print("Invalid description, put events")
+            print("Invalid description, put events of your model and try again")
+
 
     def extracting_description_from_file(self):
         for single_content in self.contents:
