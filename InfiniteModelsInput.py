@@ -38,15 +38,10 @@ class InfiniteModelInput:
                     print("Invalid description, you should put the set of clocks that are consistent with the set of events")
 
     def invalid_description_error_message(self):
-        invalid_characters = [',','-','_','/','.','~']
         number_of_state = self.extracting_data_from_description_file("N")
         if number_of_state.__eq__(None):
             print("Invalid description, put states of your model and try again")
         elif not number_of_state.__eq__(None):
-            for invalid_character in invalid_characters:
-                if invalid_character in number_of_state:
-                    print("You've put an invalid number to represent the number of states, fix it and try again")
-                    break
 
         if self.extracting_data_from_description_file("X").__eq__(None):
             print("Invalid description, put states of your model and try again")
@@ -55,6 +50,7 @@ class InfiniteModelInput:
 
     def extracting_data_from_description_file(self, character):
         data = []
+        invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if character.casefold() in single_content.casefold():
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
@@ -64,7 +60,11 @@ class InfiniteModelInput:
             number = ""
             for char in data:
                 number += str(char)
-            return number
+            for invalid_character in invalid_characters:
+                if invalid_character in number:
+                    print("You've put an invalid number to represent the number of states, fix it and try again")
+                    return None
+            return int (number)
         if data:
             return data
         return None
