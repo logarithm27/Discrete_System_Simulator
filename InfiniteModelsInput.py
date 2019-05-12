@@ -28,10 +28,7 @@ class InfiniteModelInput:
                     skeleton_of_model.append(data)
                 elif single_character == "=":
                     break
-        if self.extracting_data_from_description_file("X").__eq__(None):
-            print("Invalid description, put states of your model and try again")
-        if self.extracting_data_from_description_file("E").__eq__(None):
-            print("Invalid description, put events of your model and try again")
+
         if "V" in skeleton_of_model or "v" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
                 if element_of_model.casefold().__eq__("V".casefold()):
@@ -43,8 +40,6 @@ class InfiniteModelInput:
 
     def extracting_data_from_description_file(self, character):
         data = []
-        if character.casefold().__eq__("X".casefold()):
-            for
         for single_content in self.contents:
             if character.casefold() in single_content.casefold():
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
@@ -54,6 +49,13 @@ class InfiniteModelInput:
             return data
         return None
 
+    def invalid_description_error_message(self):
+        if self.extracting_data_from_description_file("N").__eq__(None):
+            print("Invalid description, put states of your model and try again")
+        if self.extracting_data_from_description_file("X").__eq__(None):
+            print("Invalid description, put states of your model and try again")
+        if self.extracting_data_from_description_file("E").__eq__(None):
+            print("Invalid description, put events of your model and try again")
 
 
 if __name__ == "__main__":
