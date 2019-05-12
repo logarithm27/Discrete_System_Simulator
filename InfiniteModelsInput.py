@@ -30,27 +30,29 @@ class InfiniteModelInput:
                     break
         if "X" not in skeleton_of_model or "x" not in skeleton_of_model:
             print("Invalid description, put states of your model and try again")
-        if self.extracting_events_from_description_file().__eq__(None):
+        if self.extracting_data_from_description_file("E").__eq__(None):
             print("Invalid description, put events of your model and try again")
         if "V" in skeleton_of_model or "v" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
                 if element_of_model.casefold().__eq__("V".casefold()):
                     how_many_durations += 1
             if "E" in skeleton_of_model or "e" in skeleton_of_model:
-                if len(self.extracting_events_from_description_file()) != how_many_durations:
+                if len(self.extracting_data_from_description_file("E")) != how_many_durations:
                     print("Invalid description, you should put the set of clocks that are consistent with the set of events")
 
 
-    def extracting_events_from_description_file(self):
-        events = []
+    def extracting_data_from_description_file(self, character):
+        data = []
         for single_content in self.contents:
-            if "E".casefold() in single_content.casefold():
-                split_string = single_content.replace("{","").replace("}","").replace("E","").replace("e","").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
+            if character.casefold() in single_content.casefold():
+                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for event in split_string:
-                    events.append(event)
-        if events:
-            return events
+                    data.append(event)
+        if data:
+            return data
         return None
+
+
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
