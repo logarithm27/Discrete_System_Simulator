@@ -4,7 +4,7 @@ from utility import asking_for_input_infinite_models
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
-        while self.contents is None:
+        while self.contents is None or not self.check_description_from_file():
             self.contents = asking_for_input_infinite_models()
         self.events = []
         self.states = []
@@ -28,7 +28,8 @@ class InfiniteModelInput:
                     skeleton_of_model.append(data)
                 elif single_character == "=":
                     break
-        self.invalid_description_error_message()
+        if not self.invalid_description_error_message():
+            return False
         if "V" in skeleton_of_model or "v" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
                 if element_of_model.casefold().__eq__("V".casefold()):
@@ -36,17 +37,25 @@ class InfiniteModelInput:
             if "E" in skeleton_of_model or "e" in skeleton_of_model:
                 if len(self.extracting_data_from_description_file("E")) != how_many_durations:
                     print("Invalid description, you should put the set of clocks that are consistent with the set of events")
+                    return False
+        return True
 
     def invalid_description_error_message(self):
         number_of_state = self.extracting_data_from_description_file("N")
-        if number_of_state.__eq__(None):
-            print("Invalid description, put states of your model and try again")
-        elif not number_of_state.__eq__(None):
-
-        if self.extracting_data_from_description_file("X").__eq__(None):
-            print("Invalid description, put states of your model and try again")
-        if self.extracting_data_from_description_file("E").__eq__(None):
-            print("Invalid description, put events of your model and try again")
+        if number_of_state is None:
+            print("Invalid description, put number of states of your model and try again")
+            return False
+        elif not number_of_state is None:
+            if number_of_state == 1 or number_of_state == 0:
+                print("Invalid number of states, shouldn't be less or equal to 1, try again")
+                return False
+        if self.extracting_data_from_description_file("X") is None:
+            print("Invalid description, put the set states X of your model and try again")
+            return False
+        if self.extracting_data_from_description_file("E") is None:
+            print("Invalid description, put the set of events of your model and try again")
+            return False
+        return True
 
     def extracting_data_from_description_file(self, character):
         data = []
@@ -54,8 +63,8 @@ class InfiniteModelInput:
         for single_content in self.contents:
             if character.casefold() in single_content.casefold():
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
-                for event in split_string:
-                    data.append(event)
+                for v in split_string:
+                    data.append(v)
         if character.casefold().__eq__("N".casefold()) and data:
             number = ""
             for char in data:
