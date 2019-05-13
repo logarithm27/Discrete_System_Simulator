@@ -4,7 +4,8 @@ from utility import asking_for_input_infinite_models
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
-        while self.contents is None or not self.check_description_from_file():
+        is_valid_description = self.check_description_from_file()
+        while self.contents is None or not is_valid_description:
             self.contents = asking_for_input_infinite_models()
         self.events = []
         self.states = []
@@ -60,8 +61,13 @@ class InfiniteModelInput:
     def extracting_data_from_description_file(self, character):
         data = []
         invalid_characters = [',','-','_','/','.','~']
+        split_string = ""
         for single_content in self.contents:
             if character.casefold() in single_content.casefold():
+                if character.casefold().__eq__("V".casefold()):
+                    for element in single_content:
+                        if element != "=":
+                            split_string += str(element)
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for v in split_string:
                     data.append(v)
