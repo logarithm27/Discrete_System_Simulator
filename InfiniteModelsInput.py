@@ -86,7 +86,20 @@ class InfiniteModelInput:
             return data
         return None
 
-
+    def get_durations(self):
+        durations = {}
+        for single_content in self.contents:
+            if "V" in single_content or "v" in single_content:
+                split_string = ""
+                for element in single_content:
+                    if element != "=":
+                        split_string += str(element)
+                if split_string[2] not in self.extracting_data_from_description_file("E"):
+                    print("The following event {"+split_string[2]+"} doesn't exist, fix it and try again")
+                    return None
+                elif split_string[2] in self.extracting_data_from_description_file("E"):
+                    clocks = split_string[2::]
+                    durations[split_string[2]] =
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
