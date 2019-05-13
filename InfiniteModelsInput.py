@@ -7,10 +7,11 @@ class InfiniteModelInput:
         is_valid_description = self.check_description_from_file()
         while self.contents is None or not is_valid_description:
             self.contents = asking_for_input_infinite_models()
-        self.events = []
-        self.states = []
-        self.state_machine = {}
-        self.set_of_durations = {}
+        if is_valid_description:
+            self.events = self.extracting_data_from_description_file("E")
+            self.states = self.extracting_data_from_description_file("X")
+            self.state_machine = {}
+            self.set_of_durations = self
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
@@ -86,6 +87,8 @@ class InfiniteModelInput:
             return data
         return None
 
+    def get_durations(self):
+        for
 
 
 if __name__ == "__main__":
