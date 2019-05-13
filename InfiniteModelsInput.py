@@ -11,7 +11,9 @@ class InfiniteModelInput:
             self.events = self.extracting_data_from_description_file("E")
             self.states = self.extracting_data_from_description_file("X")
             self.state_machine = {}
-            self.set_of_durations = self
+            self.set_of_durations = self.extracting_data_from_description_file("V")
+        print("Events : " + str(self.events))
+        print("States : " + str(self.states))
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
@@ -87,8 +89,6 @@ class InfiniteModelInput:
             return data
         return None
 
-    def get_durations(self):
-        for
 
 
 if __name__ == "__main__":
