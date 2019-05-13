@@ -4,16 +4,17 @@ from utility import asking_for_input_infinite_models
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
-        is_valid_description = self.check_description_from_file()
+        is_valid_description = False
+        if self.contents:
+            is_valid_description = self.check_description_from_file()
         while self.contents is None or not is_valid_description:
             self.contents = asking_for_input_infinite_models()
+            is_valid_description = self.check_description_from_file()
         if is_valid_description:
             self.events = self.extracting_data_from_description_file("E")
             self.states = self.extracting_data_from_description_file("X")
             self.state_machine = {}
             self.set_of_durations = self.get_durations()
-            while self.set_of_durations is None:
-                asking_for_input_infinite_models()
         print("Events : " + str(self.events))
         print("States : " + str(self.states))
         print("Durations : " + str(self.set_of_durations))
@@ -65,25 +66,34 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("V") is None:
             print("Invalid description, enter the set of clocks 'V' and try again")
             return False
+        if self.get_durations() is None:
+            return False
         return True
 
     def extracting_data_from_description_file(self, character):
         data = []
         invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
-            if character.casefold() in single_content.casefold():
-                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
-                for v in split_string:
-                    data.append(v)
-        if character.casefold().__eq__("N".casefold()) and data:
-            number = ""
-            for char in data:
-                number += str(char)
-            for invalid_character in invalid_characters:
-                if invalid_character in number:
-                    print("You've put an invalid number to represent the number of states, fix it and try again")
-                    return None
-            return int (number)
+            if single_content[0].casefold().__eq__(character.casefold()):
+                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("\n","").replace("[","").replace("]","")
+                if character.casefold() == "X".casefold():
+                    data = split_string.split(";")
+                    for tup in data:
+                        if tup.__eq__('..') or tup.__eq__('...'):
+                            data.remove(tup)
+                    for i,tup in enumerate(data):
+                        data[i] = tuple(map(int,data[i].replace("(","").replace(")","").split(',')))
+                else:
+                    data = split_string.split(",")
+            if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
+                number = ""
+                for char in data:
+                    number += str(char)
+                for invalid_character in invalid_characters:
+                    if invalid_character in number:
+                        print("You've put an invalid number to represent the number of states, fix it and try again")
+                        return None
+                return int (number)
         if data:
             return data
         return None
