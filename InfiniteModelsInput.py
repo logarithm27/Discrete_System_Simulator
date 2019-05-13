@@ -56,6 +56,8 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("E") is None:
             print("Invalid description, put the set of events of your model and try again")
             return False
+        if self.extracting_data_from_description_file("V") is None:
+            print("Invalid description, enter the set of clocks 'V' and try again")
         return True
 
     def extracting_data_from_description_file(self, character):
