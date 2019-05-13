@@ -62,24 +62,14 @@ class InfiniteModelInput:
             return False
         if self.extracting_data_from_description_file("V") is None:
             print("Invalid description, enter the set of clocks 'V' and try again")
+            return False
         return True
 
     def extracting_data_from_description_file(self, character):
         data = []
         invalid_characters = [',','-','_','/','.','~']
-        split_string = ""
-        durations = {}
         for single_content in self.contents:
             if character.casefold() in single_content.casefold():
-                if character.casefold().__eq__("V".casefold()):
-                    for element in single_content:
-                        if element != "=":
-                            split_string += str(element)
-                    if split_string[2] not in self.extracting_data_from_description_file("E"):
-                        print("The following event {"+split_string[2]+"} doesn't exist, fix it and try again")
-                        return None
-                    elif split_string[2] in self.extracting_data_from_description_file("E"):
-                        durations[split_string[2]] =
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace(",","").replace("\n","").replace("[","").replace("]","")
                 for v in split_string:
                     data.append(v)
