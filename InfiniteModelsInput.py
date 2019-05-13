@@ -11,7 +11,9 @@ class InfiniteModelInput:
             self.events = self.extracting_data_from_description_file("E")
             self.states = self.extracting_data_from_description_file("X")
             self.state_machine = {}
-            self.set_of_durations = self.extracting_data_from_description_file("V")
+            self.set_of_durations = self.get_durations()
+            while self.set_of_durations is None:
+                asking_for_input_infinite_models()
         print("Events : " + str(self.events))
         print("States : " + str(self.states))
         print("Durations : " + str(self.set_of_durations))
@@ -98,8 +100,14 @@ class InfiniteModelInput:
                     print("The following event {"+split_string[2]+"} doesn't exist, fix it and try again")
                     return None
                 elif split_string[2] in self.extracting_data_from_description_file("E"):
-                    clocks = split_string[2::]
-                    durations[split_string[2]] =
+                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",',').replace("\n","").split(',')
+                    try:
+                        durations[split_string[2]] = list(map(float,clocks))
+                    except None or SyntaxError or ValueError:
+                        print("Invalid list of clocks, try again")
+                        return None
+        return durations
+
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
