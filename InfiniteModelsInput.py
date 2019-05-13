@@ -97,7 +97,7 @@ class InfiniteModelInput:
                     if element != "=":
                         split_string += str(element)
                 if split_string[2] not in self.extracting_data_from_description_file("E"):
-                    print("The following event {"+split_string[2]+"} doesn't exist, fix it and try again")
+                    print("can't handle V("+ split_string[2] +"), the following event {"+split_string[2]+"} doesn't exist, fix it and try again")
                     return None
                 elif split_string[2] in self.extracting_data_from_description_file("E"):
                     clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",',').replace("\n","").split(',')
