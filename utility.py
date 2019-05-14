@@ -51,3 +51,20 @@ def transform_to_tuple(string):
     except None or SyntaxError or ValueError:
         print("Can't handle states, fix it and try again")
         return None
+
+def from_string_to_dict_transitions(split_string,events):
+    transitions= {}
+    string = list(split_string)
+    for index, char in enumerate(string[:-1]):
+        if char == "," and (string[index - 1] in events):
+            string[index]= ":"
+    string = "".join(string)
+    print(string)
+    string = replacing_delimiter(string, ",", ";")
+    print(string)
+    for index,c in enumerate(split_string):
+        string[index] = c.split(":")
+    for c in string:
+        print(c)
+        transitions[c[0]]= transform_to_tuple(c[1])
+    return transitions
