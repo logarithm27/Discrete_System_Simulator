@@ -37,3 +37,12 @@ def asking_for_input_infinite_models():
     except IOError:
         print("file doesn't exists, try again")
         return None
+
+def replacing(string, current_char, new_char):
+    string = list(string)
+    for index, char in enumerate(string[:-1]):
+        # print(char == "," and i[index+1]=="(")
+        if char == current_char and (string[index+1] == "(" or string[index-1] == ")" or string[index+1] == "."):
+            print(string[index])
+            string[index]= new_char
+    return "".join(string)

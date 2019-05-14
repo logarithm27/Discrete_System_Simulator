@@ -15,9 +15,11 @@ class InfiniteModelInput:
             self.states = self.extracting_data_from_description_file("X")
             self.state_machine = {}
             self.set_of_durations = self.get_durations()
+            self.transitions = self.extracting_data_from_description_file("T")
         print("Events : " + str(self.events))
         print("States : " + str(self.states))
         print("Durations : " + str(self.set_of_durations))
+        print("Transition : " + str(self.transitions))
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
@@ -66,6 +68,9 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("V") is None:
             print("Invalid description, enter the set of clocks 'V' and try again")
             return False
+        if self.extracting_data_from_description_file("T") is None:
+            print("Invalid description, enter the set of clocks 'V' and try again")
+            return False
         if self.get_durations() is None:
             return False
         return True
@@ -75,7 +80,7 @@ class InfiniteModelInput:
         invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
-                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("\n","").replace("[","").replace("]","")
+                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","")
                 if character.casefold() == "X".casefold():
                     data = split_string.split(";")
                     for tup in data:
