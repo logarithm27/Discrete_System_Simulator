@@ -45,3 +45,6 @@ def replacing(string, current_char, new_char):
         if char == current_char and (string[index+1] == "(" or string[index-1] == ")" or string[index+1] == "."):
             string[index]= new_char
     return "".join(string).split(new_char)
+
+def transform_to_tuple(string):
+    return tuple(map(int,string.replace("(","").replace(")","").split(',')))
