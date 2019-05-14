@@ -59,12 +59,9 @@ def from_string_to_dict_transitions(split_string,events):
         if char == "," and (string[index - 1] in events):
             string[index]= ":"
     string = "".join(string)
-    print(string)
     string = replacing_delimiter(string, ",", ";")
-    print(string)
-    for index,c in enumerate(split_string):
+    for index,c in enumerate(string):
         string[index] = c.split(":")
     for c in string:
-        print(c)
         transitions[c[0]]= transform_to_tuple(c[1])
     return transitions

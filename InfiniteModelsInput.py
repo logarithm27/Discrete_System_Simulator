@@ -69,7 +69,7 @@ class InfiniteModelInput:
             print("Invalid description, enter the set of clocks 'V' and try again")
             return False
         if self.extracting_data_from_description_file("T") is None:
-            print("Invalid description, enter the set of clocks 'V' and try again")
+            print("Invalid description, enter the set Transitions and try again")
             return False
         if self.get_durations() is None:
             return False
@@ -88,6 +88,8 @@ class InfiniteModelInput:
                             data.remove(tup)
                     for index,tup in enumerate(data):
                         data[index] = transform_to_tuple(data[index])
+                elif character.casefold().__eq__("T".casefold()):
+                    return from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
                 else:
                     data = split_string.split(",")
             if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
