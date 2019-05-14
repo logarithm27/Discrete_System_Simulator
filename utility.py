@@ -49,6 +49,6 @@ def replacing(string, current_char, new_char):
 def transform_to_tuple(string):
     try:
        return tuple(map(int,string.replace("(","").replace(")","").split(',')))
-    except None or SyntaxError or ValueError
+    except None or SyntaxError or ValueError:
         print("Can't handle states, fix it and try again")
         return None
