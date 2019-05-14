@@ -67,9 +67,9 @@ def from_string_to_dict_transitions(split_string,events):
             try:
                 transitions[c[0]]= transform_to_tuple(c[1])
             except None or IndexError:
-                print("Invalid transitions, put valid transition and try again")
-                return -1
-    except None or ValueError or SyntaxError or Exception or IndexError:
+                print("Invalid transitions, your set of transitions is invalid, fix it and try again")
+                return 27
+    except None or Exception:
         print("Invalid description, put valid transition and try again")
-        return -1
+        return 27
     return transitions

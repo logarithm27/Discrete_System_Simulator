@@ -71,7 +71,7 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("T") is None:
             print("Invalid description, enter the set Transitions and try again")
             return False
-        elif self.extracting_data_from_description_file("T") is -1:
+        if self.extracting_data_from_description_file("T") is 27:
             return False
         if self.get_durations() is None:
             return False
