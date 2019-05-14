@@ -41,7 +41,6 @@ def asking_for_input_infinite_models():
 def replacing_delimiter(string, current_char, new_char):
     string = list(string)
     for index, char in enumerate(string[:-1]):
-        # print(char == "," and i[index+1]=="(")
         if char == current_char and (string[index+1] == "(" or string[index-1] == ")" or string[index+1] == "."):
             string[index]= new_char
     return "".join(string).split(new_char)
