@@ -80,7 +80,7 @@ class InfiniteModelInput:
         invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
-                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","")
+                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","")
                 if character.casefold() == "X".casefold():
                     data = replacing(split_string,",",";")
                     for tup in data:
