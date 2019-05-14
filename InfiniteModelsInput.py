@@ -86,8 +86,8 @@ class InfiniteModelInput:
                     for tup in data:
                         if tup.__eq__('..') or tup.__eq__('...'):
                             data.remove(tup)
-                    for i,tup in enumerate(data):
-                        data[i] = transform_to_tuple(data[i])
+                    for index,tup in enumerate(data):
+                        data[index] = transform_to_tuple(data[index])
                 else:
                     data = split_string.split(",")
             if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
