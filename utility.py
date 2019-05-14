@@ -53,6 +53,7 @@ def transform_to_tuple(string):
         return None
 
 def from_string_to_dict_transitions(split_string,events):
+    typo_error = 27
     transitions= {}
     try:
         string = list(split_string)
@@ -64,12 +65,7 @@ def from_string_to_dict_transitions(split_string,events):
         for index,c in enumerate(string):
             string[index] = c.split(":")
         for c in string:
-            try:
-                transitions[c[0]]= transform_to_tuple(c[1])
-            except None or IndexError:
-                print("Invalid transitions, your set of transitions is invalid, fix it and try again")
-                return 27
-    except None or Exception:
-        print("Invalid description, put valid transition and try again")
-        return 27
+            transitions[c[0]]= transform_to_tuple(c[1])
+    except None or Exception or IndexError:
+        return typo_error
     return transitions
