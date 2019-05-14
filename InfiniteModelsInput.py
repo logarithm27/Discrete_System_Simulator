@@ -82,7 +82,7 @@ class InfiniteModelInput:
             if single_content[0].casefold().__eq__(character.casefold()):
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","")
                 if character.casefold() == "X".casefold():
-                    data = replacing(split_string,",",";")
+                    data = replacing_delimiter(split_string, ",", ";")
                     for tup in data:
                         if tup.__eq__('..') or tup.__eq__('...'):
                             data.remove(tup)
