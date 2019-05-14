@@ -28,7 +28,7 @@ class InfiniteModelInput:
         skeleton_of_model = []
         how_many_durations = 0
         for single_content in self.contents:
-            if "#" in single_content:
+            if single_content[0] != "#":
                 pass
             # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
             data = ""
