@@ -1,4 +1,4 @@
-from utility import asking_for_input_infinite_models
+from utility import asking_for_input_infinite_models, replacing
 
 
 class InfiniteModelInput:
@@ -82,7 +82,7 @@ class InfiniteModelInput:
             if single_content[0].casefold().__eq__(character.casefold()):
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","")
                 if character.casefold() == "X".casefold():
-                    data = split_string.split(";")
+                    data = replacing(split_string,",",";")
                     for tup in data:
                         if tup.__eq__('..') or tup.__eq__('...'):
                             data.remove(tup)

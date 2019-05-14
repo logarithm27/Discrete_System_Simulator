@@ -45,4 +45,4 @@ def replacing(string, current_char, new_char):
         if char == current_char and (string[index+1] == "(" or string[index-1] == ")" or string[index+1] == "."):
             print(string[index])
             string[index]= new_char
-    return "".join(string)
+    return "".join(string).split(new_char)
