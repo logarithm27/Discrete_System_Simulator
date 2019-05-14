@@ -54,14 +54,22 @@ def transform_to_tuple(string):
 
 def from_string_to_dict_transitions(split_string,events):
     transitions= {}
-    string = list(split_string)
-    for index, char in enumerate(string[:-1]):
-        if char == "," and (string[index - 1] in events):
-            string[index]= ":"
-    string = "".join(string)
-    string = replacing_delimiter(string, ",", ";")
-    for index,c in enumerate(string):
-        string[index] = c.split(":")
-    for c in string:
-        transitions[c[0]]= transform_to_tuple(c[1])
+    try:
+        string = list(split_string)
+        for index, char in enumerate(string[:-1]):
+            if char == "," and (string[index - 1] in events):
+                string[index]= ":"
+        string = "".join(string)
+        string = replacing_delimiter(string, ",", ";")
+        for index,c in enumerate(string):
+            string[index] = c.split(":")
+        for c in string:
+            try:
+                transitions[c[0]]= transform_to_tuple(c[1])
+            except None or IndexError:
+                print("Invalid transitions, put valid transition and try again")
+                return -1
+    except None or ValueError or SyntaxError or Exception or IndexError:
+        print("Invalid description, put valid transition and try again")
+        return -1
     return transitions
