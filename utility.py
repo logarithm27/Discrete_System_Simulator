@@ -55,6 +55,8 @@ def transform_to_tuple(string):
         print("Can't handle states, fix it and try again")
         return None
 
+# this function allow to transform the string that contains transitions to a dictionary
+# the keys are the events, the values are the points i.e : to make the event b possible, we should add (x',y') to the source state (x,y)
 def from_string_to_dict_transitions(split_string,events):
     typo_error = 27
     transitions= {}
