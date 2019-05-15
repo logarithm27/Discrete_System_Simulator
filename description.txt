@@ -2,14 +2,14 @@
 // max_bounds stands for the maximum values that the x,y and z coordinates can take
 // min_bounds stands for the minimum values that the x,y and z coordinates can take
 // N can be designated by the user, if not, the program can give a default value
-// all components of the file are not case-sensitive you can wirte in lower or upper case
+// all components of the file are not case-sensitive you can write in lower or upper case
 // "..." in the set 'X' stands for infinite number of (you have the choice to write it)
 // you can write the description in different ways :
 // d= {event:(x,y),..} or [[event,(x,y)],[],..] or event,(x,y),.. or event:(x,y),..
 // each element should appear only once, i.e: you cannot have two set of events 'E', except for the sets of durations V's, you can have more than one (depends to your events)
 //'RANDOM' indicates that the durations are generated randomly, if you don't put it, you should give durations manually
 // comments are allowed after a double forward slash '//'
-// if there's an error in your description, the programm will warn you
+// if there's an error in your description, the program will warn you
 
 E={a,b,c}
 X={(0,0),(1,0),(1,1),(1,2),...} 
