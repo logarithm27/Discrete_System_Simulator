@@ -92,7 +92,13 @@ class InfiniteModelInput:
                         print("all states should be under the same dimension, and cannot exceed 3 Dimensions fix it and try again")
                         return None
                 elif character.casefold().__eq__("T".casefold()):
-                    return from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
+                    transitions = from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
+                    if transitions is not None:
+                        for transition in transitions:
+                            if len(transitions[transition]) > MAX_DIMENSION or len(transitions[transition]) == 0 or len(self.extracting_data_from_description_file("X")[0]) != len(transitions[transition]):
+                                print("Inconsistent dimensions between states in the set of transitions 'T' and the set of states 'X' ")
+                                return None
+                    return transitions
                 else:
                     data = split_string.split(",")
             if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
