@@ -78,6 +78,7 @@ def from_string_to_dict_transitions(split_string,events):
         return typo_error
     return transitions
 
+# this function skip the commentaries that are between the the lines or at the end of the line
 def pass_commentaries(string):
     for index,c in enumerate(string[:-1]):
         if string[index].__eq__("/") and string[index+1].__eq__("/") :
