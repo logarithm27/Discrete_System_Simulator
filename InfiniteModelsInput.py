@@ -1,6 +1,6 @@
 from utility import *
 MAX_DIMENSION = 3
-
+MAX_N = 15
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
@@ -15,11 +15,11 @@ class InfiniteModelInput:
             self.states = sorted(list(dict.fromkeys(self.extracting_data_from_description_file("X"))))
             self.state_machine = {}
             self.set_of_durations = self.get_durations()
-            self.transitions = self.extracting_data_from_description_file("T")
+            self.events_description = self.extracting_data_from_description_file("D")
         print("Events : " + str(self.events))
         print("States : " + str(self.states))
         print("Durations : " + str(self.set_of_durations))
-        print("Transition : " + str(self.transitions))
+        print("Description : " + str(self.events_description))
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
@@ -63,10 +63,10 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("V") is None:
             print("Invalid description, enter the set of clocks 'V' and try again")
             return False
-        if self.extracting_data_from_description_file("T") is None:
-            print("Invalid description, enter the set Transitions and try again")
+        if self.extracting_data_from_description_file("D") is None:
+            print("Invalid description, enter the set events descriptions and try again")
             return False
-        if self.extracting_data_from_description_file("T") is TYPO_ERROR:
+        if self.extracting_data_from_description_file("D") is TYPO_ERROR:
             print("Your set of transition is invalid, maybe a typo error in your file, fix it and try again")
             return False
         if self.get_durations() is None:
@@ -91,14 +91,14 @@ class InfiniteModelInput:
                     if not check_dimension_consistency(data) or len(data[0]) > MAX_DIMENSION:
                         print("all states should be under the same dimension, and cannot exceed 3 Dimensions fix it and try again")
                         return None
-                elif character.casefold().__eq__("T".casefold()):
-                    transitions = from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
-                    if transitions is not None:
-                        for transition in transitions:
-                            if len(transitions[transition]) > MAX_DIMENSION or len(transitions[transition]) == 0 or len(self.extracting_data_from_description_file("X")[0]) != len(transitions[transition]):
-                                print("Inconsistent dimensions between states in the set of transitions 'T' and the set of states 'X' ")
+                elif character.casefold().__eq__("D".casefold()):
+                    descriptions = from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
+                    if descriptions is not None:
+                        for description in descriptions:
+                            if len(descriptions[description]) > MAX_DIMENSION or len(descriptions[description]) == 0 or len(self.extracting_data_from_description_file("X")[0]) != len(descriptions[description]):
+                                print("Inconsistent dimensions between states in the set of events description 'D' and the set of states 'X' ")
                                 return None
-                    return transitions
+                    return descriptions
                 else:
                     data = split_string.split(",")
             if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
