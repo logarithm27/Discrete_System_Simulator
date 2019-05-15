@@ -33,6 +33,9 @@ def asking_for_input_infinite_models():
             contents = file.readlines()
             # you may also want to remove whitespace characters like `\n` at the end of each line
         contents = [line.strip() for line in contents]
+        for single_content in contents:
+            if len(single_content.strip()) == 0: # skip the empty lines
+                contents.remove(single_content)
         return contents
     except IOError:
         print("file doesn't exists, try again")
