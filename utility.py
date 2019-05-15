@@ -1,3 +1,7 @@
+MAX_DIMENSION = 3
+TYPO_ERROR = 27
+
+
 def asking_for_input(ask_for_number_of_data, ask_for_data):
     try:
         number_of_data = int(input(ask_for_number_of_data))
@@ -62,7 +66,6 @@ def transform_to_tuple(string):
 # this function allow to transform the string that contains transitions to a dictionary
 # the keys are the events, the values are the points i.e : to make the event b possible, we should add (x',y') to the source state (x,y)
 def from_string_to_dict_transitions(split_string,events):
-    typo_error = 27
     transitions= {}
     try:
         string = list(split_string)
@@ -79,7 +82,7 @@ def from_string_to_dict_transitions(split_string,events):
             elif c[0] not in events:
                 return 27
     except None or Exception or IndexError:
-        return typo_error
+        return TYPO_ERROR
     return transitions
 
 # this function skip the commentaries that are between the the lines or at the end of the line

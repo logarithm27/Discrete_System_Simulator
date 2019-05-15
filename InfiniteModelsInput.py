@@ -66,7 +66,7 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("T") is None:
             print("Invalid description, enter the set Transitions and try again")
             return False
-        if self.extracting_data_from_description_file("T") is 27:
+        if self.extracting_data_from_description_file("T") is TYPO_ERROR:
             print("Your set of transition is invalid, maybe a typo error in your file, fix it and try again")
             return False
         if self.get_durations() is None:
