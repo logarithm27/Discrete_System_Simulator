@@ -88,8 +88,8 @@ class InfiniteModelInput:
                         data[index] = transform_to_tuple(data[index])
                         if data[index] is None:
                             return None
-                    if not check_dimension_consistency(data):
-                        print("all states should be under the same dimension, fix it and try again")
+                    if not check_dimension_consistency(data) or len(data[0]) > MAX_DIMENSION:
+                        print("all states should be under the same dimension, and cannot exceed 3 Dimensions fix it and try again")
                         return None
                 elif character.casefold().__eq__("T".casefold()):
                     return from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
