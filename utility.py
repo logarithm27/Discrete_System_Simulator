@@ -65,7 +65,10 @@ def from_string_to_dict_transitions(split_string,events):
         for index,c in enumerate(string):
             string[index] = c.split(":")
         for c in string:
-            transitions[c[0]]= transform_to_tuple(c[1])
+            if c[0] in events:
+                transitions[c[0]]= transform_to_tuple(c[1])
+            elif c[0] not in events:
+                return 27
     except None or Exception or IndexError:
         return typo_error
     return transitions
