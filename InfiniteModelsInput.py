@@ -12,7 +12,7 @@ class InfiniteModelInput:
             is_valid_description = self.check_description_from_file()
         if is_valid_description:
             self.events = sorted(list(dict.fromkeys(self.extracting_data_from_description_file("E"))))
-            self.states = self.extracting_data_from_description_file("X")
+            self.states = sorted(list(dict.fromkeys(self.extracting_data_from_description_file("X"))))
             self.state_machine = {}
             self.set_of_durations = self.get_durations()
             self.transitions = self.extracting_data_from_description_file("T")
