@@ -86,6 +86,8 @@ class InfiniteModelInput:
                             data.remove(tup)
                     for index,tup in enumerate(data):
                         data[index] = transform_to_tuple(data[index])
+                        if data[index] is None:
+                            return None
                 elif character.casefold().__eq__("T".casefold()):
                     return from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
                 else:
