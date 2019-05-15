@@ -1,5 +1,5 @@
 from utility import *
-
+MAX_DIMENSION = 3
 
 class InfiniteModelInput:
     def __init__(self):
@@ -88,6 +88,9 @@ class InfiniteModelInput:
                         data[index] = transform_to_tuple(data[index])
                         if data[index] is None:
                             return None
+                    if not check_dimension_consistency(data):
+                        print("all states should be under the same dimension, fix it and try again")
+                        return None
                 elif character.casefold().__eq__("T".casefold()):
                     return from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
                 else:
@@ -117,7 +120,7 @@ class InfiniteModelInput:
                     print("can't handle V("+ split_string[2] +"), the following event {"+split_string[2]+"} doesn't exist, fix it and try again")
                     return None
                 elif split_string[2] in self.extracting_data_from_description_file("E"):
-                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","")
+                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","").replace("{","").replace("}","").replace("[","").replace("]","")
                     clocks = pass_commentaries(clocks).split(",")
                     try:
                         durations[split_string[2]] = list(map(float,clocks))

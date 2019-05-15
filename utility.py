@@ -89,3 +89,10 @@ def pass_commentaries(string):
             string = string[slice(index)]
             break
     return "".join(string)
+
+def check_dimension_consistency(states):
+    len_state_tuple = len(states[0])
+    for state in states:
+        if len(state) != len_state_tuple:
+            return False
+    return True
