@@ -18,6 +18,9 @@ def asking_for_input(ask_for_number_of_data, ask_for_data):
         return None
     return data
 
+# sorting the dictionary that contains events and its corresponding dates by dates
+# keys are events, t are values
+# i.e : { 'a':0.5, 'b':1.5 }
 def sort_by_date(dictionary):
     ordered = sorted(dictionary.items(), key = lambda event__date: (event__date[1], event__date[0]))
     dictionary = {}
