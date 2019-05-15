@@ -44,6 +44,7 @@ def asking_for_input_infinite_models():
         print("file doesn't exists, try again")
         return None
 
+# replacing a specific character by another inside a given string to make the process of making a list easier
 def replacing_delimiter(string, current_char, new_char):
     string = list(string)
     for index, char in enumerate(string[:-1]):
