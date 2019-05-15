@@ -72,3 +72,10 @@ def from_string_to_dict_transitions(split_string,events):
     except None or Exception or IndexError:
         return typo_error
     return transitions
+
+def pass_commentaries(string):
+    for index,c in enumerate(string[:-1]):
+        if string[index].__eq__("/") and string[index+1].__eq__("/") :
+            string = string[slice(index)]
+            break
+    return "".join(string)
