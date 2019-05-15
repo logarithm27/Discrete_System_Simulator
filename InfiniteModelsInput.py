@@ -32,12 +32,7 @@ class InfiniteModelInput:
                 pass
             # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
             data = ""
-            for single_character in single_content:
-                if single_character != "=":
-                    data += str(single_character)
-                    skeleton_of_model.append(data)
-                elif single_character == "=":
-                    break
+            data += str(single_content[0])
         if not self.invalid_description_error_message():
             return False
         if "V" in skeleton_of_model or "v" in skeleton_of_model:
@@ -83,9 +78,7 @@ class InfiniteModelInput:
         invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
-                if "//" in single_content:
-                    split_string = pass_commentaries(single_content)
-                split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","").replace(" ","")
+                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
                 if character.casefold() == "X".casefold():
                     data = replacing_delimiter(split_string, ",", ";")
                     for tup in data:
@@ -113,7 +106,7 @@ class InfiniteModelInput:
     def get_durations(self):
         durations = {}
         for single_content in self.contents:
-            if "V" in single_content or "v" in single_content:
+            if "V".casefold() == single_content[0].casefold() and (single_content[1].__eq__("(") or single_content[1].__eq__("[")):
                 split_string = ""
                 for element in single_content:
                     if element != "=":
@@ -122,7 +115,8 @@ class InfiniteModelInput:
                     print("can't handle V("+ split_string[2] +"), the following event {"+split_string[2]+"} doesn't exist, fix it and try again")
                     return None
                 elif split_string[2] in self.extracting_data_from_description_file("E"):
-                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",',').replace("\n","").split(',')
+                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","")
+                    clocks = pass_commentaries(clocks).split(",")
                     try:
                         durations[split_string[2]] = list(map(float,clocks))
                     except None or SyntaxError or ValueError:
