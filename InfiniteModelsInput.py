@@ -64,7 +64,7 @@ class InfiniteModelInput:
             print("Invalid description, enter the set of clocks 'V' and try again")
             return False
         if self.extracting_data_from_description_file("D") is None:
-            print("Invalid description, enter the set events descriptions and try again")
+            print("Invalid description, enter the set of events descriptions and try again")
             return False
         if self.extracting_data_from_description_file("D") is TYPO_ERROR:
             print("Your set of transition is invalid, maybe a typo error in your file, fix it and try again")
