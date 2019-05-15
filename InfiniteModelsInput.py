@@ -28,7 +28,7 @@ class InfiniteModelInput:
         skeleton_of_model = []
         how_many_durations = 0
         for single_content in self.contents:
-            if single_content[0] == "#":
+            if single_content[0] == "/" and single_content[1]=="/":
                 pass
             # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
             data = ""
@@ -83,6 +83,8 @@ class InfiniteModelInput:
         invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
+                if "//" in single_content:
+                    split_string = pass_commentaries(single_content)
                 split_string = single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","").replace(" ","")
                 if character.casefold() == "X".casefold():
                     data = replacing_delimiter(split_string, ",", ";")
