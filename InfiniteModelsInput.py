@@ -26,6 +26,8 @@ class InfiniteModelInput:
         print("Durations : " + str(self.set_of_durations))
         print("Description : " + str(self.events_description))
         print("Max Number : " + str(self.number_of_states))
+
+
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
         # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
@@ -72,7 +74,6 @@ class InfiniteModelInput:
 
     def extracting_data_from_description_file(self, character):
         data = []
-        invalid_characters = [',','-','_','/','.','~']
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
                 split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
