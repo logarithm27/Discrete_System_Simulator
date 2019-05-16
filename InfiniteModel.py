@@ -1,5 +1,5 @@
 from InfiniteModelsInput import *
-
+from utility import *
 
 class InfiniteModelSimulator:
     def __init__(self):
@@ -11,6 +11,32 @@ class InfiniteModelSimulator:
         self.max_number = self.start.number_of_states
         self.max_bounds = self.start.max_bounds
         self.min_bounds = self.start.min_bounds
+        self.build_infinite_state_machine()
+        self.transitions = self.build_state_machine()
+        for transition in self.transitions:
+            print(transition)
+
+    def build_state_machine(self):
+        transitions = []
+        for source_state in self.states:
+            for destination_state in self.states:
+                for event in self.events_description:
+                    state = tuple_sum(self.events_description[event], source_state)
+                    if state == destination_state:
+                        transitions.append({'event': event, 'source':source_state, 'destination':destination_state})
+        return transitions
+
+    def build_infinite_state_machine(self):
+        max_n = 0
+        while max_n < self.max_number:
+            states = self.states
+            for state in states:
+                for event in self.events_description:
+                    new_state = tuple_sum(self.events_description[event], state)
+                    if new_state not in self.states and check_valid_state(self.min_bounds,self.max_bounds,new_state):
+                        self.states.append(new_state)
+            max_n += 1
+
 
 
 if __name__ == "__main__":

@@ -105,3 +105,9 @@ def tuple_sum(tuple_1, tuple_2):
     for index, coordinate in enumerate(tuple_1):
         next_state.append(tuple_1[index]+ tuple_2[index])
     return tuple(map(int,next_state))
+
+def check_valid_state(min_bound, max_bound, tuple_to_check):
+    for index, point in enumerate(tuple_to_check):
+        if tuple_to_check[index] < min_bound[index] or tuple_to_check[index] > max_bound[index]:
+            return False
+    return True
