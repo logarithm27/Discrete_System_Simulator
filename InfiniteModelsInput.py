@@ -1,9 +1,11 @@
 from utility import *
 MAX_DIMENSION = 3
 MAX_N = 15
+INVALID_MAX_N_ERROR = [-2,-1,0,1]
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
+        self.number_of_states = MAX_N
         is_valid_description = False
         if self.contents:
             is_valid_description = self.check_description_from_file()
@@ -16,11 +18,14 @@ class InfiniteModelInput:
             self.state_machine = {}
             self.set_of_durations = self.get_durations()
             self.events_description = self.extracting_data_from_description_file("D")
+            self.number_of_states = self.max_n_number_checker()
+            if self.number_of_states in INVALID_MAX_N_ERROR:
+                self.number_of_states = MAX_N
         print("Events : " + str(self.events))
         print("States : " + str(self.states))
         print("Durations : " + str(self.set_of_durations))
         print("Description : " + str(self.events_description))
-
+        print("Max Number : " + str(self.number_of_states))
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
         # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
@@ -46,14 +51,6 @@ class InfiniteModelInput:
         return True
 
     def invalid_description_error_message(self):
-        number_of_state = self.extracting_data_from_description_file("N")
-        if number_of_state is None:
-            print("Invalid description, put number of states of your model and try again")
-            return False
-        elif not number_of_state is None:
-            if number_of_state == 1 or number_of_state == 0:
-                print("Invalid number of states, shouldn't be less or equal to 1, try again")
-                return False
         if self.extracting_data_from_description_file("X") is None:
             print("Invalid description, put the set states X of your model and try again")
             return False
@@ -89,7 +86,7 @@ class InfiniteModelInput:
                         if data[index] is None:
                             return None
                     if not check_dimension_consistency(data) or len(data[0]) > MAX_DIMENSION:
-                        print("all states should be under the same dimension, and cannot exceed 3 Dimensions fix it and try again")
+                        print("all states should be under the same dimension, and cannot exceed 3 Dimensions, fix it and try again")
                         return None
                 elif character.casefold().__eq__("D".casefold()):
                     descriptions = from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
@@ -101,18 +98,20 @@ class InfiniteModelInput:
                     return descriptions
                 else:
                     data = split_string.split(",")
-            if character.casefold().__eq__("N".casefold()) and data  and single_content[0].__eq__(character.casefold()):
-                number = ""
-                for char in data:
-                    number += str(char)
-                for invalid_character in invalid_characters:
-                    if invalid_character in number:
-                        print("You've put an invalid number to represent the number of states, fix it and try again")
-                        return None
-                return int (number)
         if data:
             return data
         return None
+
+    def max_n_number_checker(self):
+        for single_content in self.contents:
+            if single_content[0].casefold().__eq__("N".casefold()):
+                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("N","").replace("N".lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                try:
+                    return int (split_string)
+                except ValueError or SyntaxError or TypeError:
+                    print("Invalid Maximum Number, the number will be set to "+ str(MAX_N) +" by default")
+                    return -1
+        return -2
 
     def get_durations(self):
         durations = {}
