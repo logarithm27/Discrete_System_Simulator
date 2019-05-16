@@ -23,13 +23,6 @@ class InfiniteModelInput:
             self.min_bounds = self.get_bounds("min")
             if self.number_of_states in INVALID_MAX_N_ERROR:
                 self.number_of_states = MAX_N
-        print("Events : " + str(self.events))
-        print("States : " + str(self.states))
-        print("Durations : " + str(self.set_of_durations))
-        print("Description : " + str(self.events_description))
-        print("Max Number : " + str(self.number_of_states))
-        print("Max bounds : " + str(self.max_bounds))
-        print("Min bounds : " + str(self.min_bounds))
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
