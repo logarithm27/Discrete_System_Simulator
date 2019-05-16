@@ -19,6 +19,8 @@ class InfiniteModelInput:
             self.set_of_durations = self.get_durations()
             self.events_description = self.extracting_data_from_description_file("D")
             self.number_of_states = self.max_n_number_checker()
+            self.max_bounds = self.get_bounds("max")
+            self.min_bounds = self.get_bounds("min")
             if self.number_of_states in INVALID_MAX_N_ERROR:
                 self.number_of_states = MAX_N
         print("Events : " + str(self.events))
@@ -26,7 +28,8 @@ class InfiniteModelInput:
         print("Durations : " + str(self.set_of_durations))
         print("Description : " + str(self.events_description))
         print("Max Number : " + str(self.number_of_states))
-
+        print("Max bounds : " + str(self.max_bounds))
+        print("Min bounds : " + str(self.min_bounds))
 
     def check_description_from_file(self):
         # the skeleton of model should contain E for the set of events,
@@ -69,6 +72,12 @@ class InfiniteModelInput:
             print("Your set of transition is invalid, maybe a typo error in your file, fix it and try again")
             return False
         if self.get_durations() is None:
+            return False
+        if self.get_bounds("max") is None:
+            print("Put the maximum bounds and try again")
+            return False
+        if self.get_bounds("min") is None:
+            print("Put the maximum bounds and try again")
             return False
         return True
 
@@ -113,6 +122,31 @@ class InfiniteModelInput:
                     print("Invalid Maximum Number, the number will be set to "+ str(MAX_N) +" by default")
                     return -1
         return -2
+
+    def get_bounds(self, max_or_min):
+        for single_content in self.contents:
+            if single_content[0].casefold().__eq__(max_or_min[0].casefold()) and single_content[1].casefold().__eq__(max_or_min[1].casefold()) and single_content[2].casefold().__eq__(max_or_min[2].casefold()):
+                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace(max_or_min+"_bounds","").replace(max_or_min.upper()+"_BOUNDS","").replace("=","").replace("[","").replace("]","").replace(" ","").replace("(","").replace(")",""))
+                bound = split_string.split(",")
+                for index, coordinate in enumerate(bound):
+                    if coordinate == "N":
+                        max_num = self.max_n_number_checker() # check if the user have put N in description file
+                        if max_num not in INVALID_MAX_N_ERROR:
+                            bound[index] = str(max_num)
+                        else:
+                            bound[index] = str(MAX_N)
+                try:
+                    bound = tuple(map(int,bound))
+                except ValueError or SyntaxError or TypeError:
+                    print("Invalid description, put the "+ max_or_min+ " bounds properly and try again")
+                    return None
+                if len(bound) > MAX_DIMENSION and len(bound) != len(self.extracting_data_from_description_file("X")[0]):
+                    print("Inconsistent dimensions in maximum bounds, try again")
+                    return None
+                else:
+                    return bound
+        return None
+
 
     def get_durations(self):
         durations = {}

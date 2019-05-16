@@ -1,5 +1,5 @@
 // 'E':events, 'D': Events' description, 'X':States, bounds = (x,y,z), n = max number of states
-// max_bounds stands for the maximum values that the x,y and z coordinates can take
+// get_bounds stands for the maximum values that the x,y and z coordinates can take
 // min_bounds stands for the minimum values that the x,y and z coordinates can take
 // N can be designated by the user, if not, the program can give a default value
 // all components of the file are not case-sensitive you can write in lower or upper case
@@ -14,7 +14,7 @@
 E={a,b,c}
 X={(0,0),(1,0),(1,1),(1,2),...} 
 N=8 
-max_bounds=(0,N)
+get_bounds=(0,N)
 min_bounds=()
 v[a]=1,1.5,1.5
 v(b)=2,0.5,1.5
