@@ -99,3 +99,9 @@ def check_dimension_consistency(states):
         if len(state) != len_state_tuple:
             return False
     return True
+
+def tuple_sum(tuple_1, tuple_2):
+    next_state = []
+    for index, coordinate in enumerate(tuple_1):
+        next_state.append(tuple_1[index]+ tuple_2[index])
+    return tuple(map(int,next_state))
