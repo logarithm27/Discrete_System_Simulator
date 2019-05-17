@@ -1,3 +1,5 @@
+import timeit
+
 from InfiniteModelsInput import *
 from utility import *
 
@@ -23,7 +25,7 @@ class InfiniteModelSimulator:
         transitions = []
         for source_state in self.states:
             for destination_state in self.states:
-                for event in self.events_description:
+                for event in self.events_description: # O(n x m x l) exponential
                     state = tuple_sum(self.events_description[event], source_state)
                     if state == destination_state:
                         transitions.append({'event': event, 'source':source_state, 'destination':destination_state})
@@ -42,4 +44,5 @@ class InfiniteModelSimulator:
 
 
 if __name__ == "__main__":
-    start_input = InfiniteModelSimulator()
+    execution_time = float(timeit.timeit(lambda: InfiniteModelSimulator(), number=1))
+    print("exec time : " + str(round(execution_time,6)))
