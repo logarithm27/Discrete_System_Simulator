@@ -11,7 +11,7 @@ class InfiniteModelSimulator:
         self.max_number = self.start.number_of_states
         self.max_bounds = self.start.max_bounds
         self.min_bounds = self.start.min_bounds
-        self.build_infinite_state_machine()
+        self.build_infinite_states()
         self.transitions = self.build_state_machine()
         for transition in self.transitions:
             print(transition)
@@ -26,7 +26,7 @@ class InfiniteModelSimulator:
                         transitions.append({'event': event, 'source':source_state, 'destination':destination_state})
         return transitions
 
-    def build_infinite_state_machine(self):
+    def build_infinite_states(self):
         max_n = 0
         while max_n < self.max_number:
             states = self.states
