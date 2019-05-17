@@ -111,3 +111,20 @@ def check_valid_state(min_bound, max_bound, tuple_to_check):
         if tuple_to_check[index] < min_bound[index] or tuple_to_check[index] > max_bound[index]:
             return False
     return True
+
+def set_of_possible_events_of_all_states(states, transitions):
+    # gamma is a dictionary : keys are states, and values are possible events that can go in or out that corresponding state
+    gamma = {}
+    for state in states:
+        # each state has a list of events
+        gamma[state] = []
+    for transition in transitions:
+        # adding events that can go from the state
+        gamma[transition['source']].append(transition['event'])
+        # adding events that can left or goes into the state
+        gamma[transition['destination']].append(transition['event'])
+    for state in gamma:
+        # removing duplicate events added in the list, so we can have a list of unique events that can be triggered from the
+        # corresponded state
+        gamma[state] = sorted(list(dict.fromkeys(gamma[state])))  # remove duplicates
+    return gamma

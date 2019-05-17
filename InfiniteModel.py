@@ -13,8 +13,11 @@ class InfiniteModelSimulator:
         self.min_bounds = self.start.min_bounds
         self.build_infinite_states()
         self.transitions = self.build_state_machine()
+        self.gamma = set_of_possible_events_of_all_states(self.states, self.transitions)
         for transition in self.transitions:
             print(transition)
+        for element in self.gamma:
+            print(str(element) + ": " + str(self.gamma[element]))
 
     def build_state_machine(self):
         transitions = []
@@ -36,7 +39,6 @@ class InfiniteModelSimulator:
                     if new_state not in self.states and check_valid_state(self.min_bounds,self.max_bounds,new_state):
                         self.states.append(new_state)
             max_n += 1
-
 
 
 if __name__ == "__main__":
