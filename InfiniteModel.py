@@ -29,7 +29,7 @@ class InfiniteModelSimulator:
     def build_infinite_states(self):
         max_n = 0
         while max_n < self.max_number:
-            states = self.states
+            states = sorted(list(dict.fromkeys(self.states)))
             for state in states:
                 for event in self.events_description:
                     new_state = tuple_sum(self.events_description[event], state)
