@@ -128,3 +128,11 @@ def set_of_possible_events_of_all_states(states, transitions):
         # corresponded state
         gamma[state] = sorted(list(dict.fromkeys(gamma[state])))  # remove duplicates
     return gamma
+
+def next_state(current_state, next_event, transitions):
+    for transition in transitions:
+        if transition['event'] == next_event and transition['source'] == current_state:
+            return transition['destination']
+
+def still_active(event, state, gamma):
+    return event in gamma[state]

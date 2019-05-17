@@ -1,5 +1,5 @@
 from Input import Input
-from utility import sort_by_date
+from utility import *
 
 
 class Simulator:
@@ -28,14 +28,6 @@ class Simulator:
             self.simulate()
         for c in self.calender:
             print(c)
-
-    def next_state(self, current_state, next_event):
-        for transition in self.user_input.state_machine['transitions']:
-            if transition['event'] == next_event and transition['source'] == current_state:
-                return transition['destination']
-
-    def still_active(self, event, state):
-        return event in self.gamma[state]
 
     def get_min_y_star_and_arg_event(self, active_events):
         ordered_events_by_clock_value = {}
@@ -92,13 +84,13 @@ class Simulator:
             self.next_event_date_t_prime = ordered_events_by_date[self.next_event_e_prime]
             self.initial_event_date_t_previous = self.next_event_date_t_prime
             self.steps.append("t' = " + str(self.initial_event_date_t_previous)+"\n")
-            self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
+            self.next_state_x_prime = next_state(current_state, self.next_event_e_prime, self.user_input.state_machine['transitions'])
             ordered_events_by_date.pop(self.next_event_e_prime)
             # get all events except the trigger event that are available on the ordered list
             events = list(ordered_events_by_date.keys())
             # for every active events in the current state, test if this will be active on the next state, if it's not then remove it
             for event in events:
-                if not self.still_active(event,self.next_state_x_prime):
+                if not still_active(event,self.next_state_x_prime, self.gamma):
                     ordered_events_by_date.pop(event)
                     self.steps.append("the event {" +str(event) +"} will be removed because it's not active in the next state"+ '\n')
             self.calender.append(
@@ -122,10 +114,10 @@ class Simulator:
                 get_y_star_and_arg = self.get_min_y_star_and_arg_event(active_events)
             self.min_clock_y_star = get_y_star_and_arg[0][1]  # get value which is a y*
             self.next_event_e_prime = get_y_star_and_arg[0][0]  # get key (arg which is an event )
-            self.next_state_x_prime = self.next_state(current_state, self.next_event_e_prime)
+            self.next_state_x_prime = next_state(current_state, self.next_event_e_prime,self.user_input.state_machine['transitions'])
             next_possible_events = self.gamma[self.next_state_x_prime]
             for possible_event in next_possible_events:
-                if possible_event != self.next_event_e_prime and self.still_active(possible_event, current_state):
+                if possible_event != self.next_event_e_prime and still_active(possible_event, current_state,self.gamma):
                     if len(self.duration[possible_event]) == 0:
                         self.duration[possible_event].append(self.last_clock_pop[possible_event] - self.min_clock_y_star)
                     elif len(self.duration[possible_event]) > 0:
