@@ -20,14 +20,16 @@ class InfiniteModel:
         self.durations = random_durations_generator(self.events, self.lambdas)
         self.calendar = []
         self.simulate()
-        # for duration in self.durations:
-        #     print(self.durations[duration])
-        # for transition in self.transitions:
-        #     print(transition)
-        # for element in self.gamma:
-        #     print(str(element) + ": " + str(self.gamma[element]))
-        # for state in self.states:
-        #     print(state)
+        for duration in self.durations:
+            print(self.durations[duration])
+        for transition in self.transitions:
+            print(transition)
+        for element in self.gamma:
+            print(str(element) + ": " + str(self.gamma[element]))
+        for state in self.states:
+            print(state)
+        for c in self.calendar:
+            print(c)
 
 
     def build_state_machine(self):
@@ -55,8 +57,6 @@ class InfiniteModel:
         simulator = Simulator(self.states[0],self.durations,self.gamma,self.transitions)
         simulator.simulate()
         self.calendar = simulator.calendar
-        for c in self.calendar:
-            c['date'] = round(c['date'],1)
         simulator.output_simulation_details()
 
 if __name__ == "__main__":

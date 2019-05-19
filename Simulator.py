@@ -46,7 +46,7 @@ class Simulator:
             self.steps.append("ordered list " +str(ordered_events_by_date) + '\n')
             next_event_e_prime = next(iter(ordered_events_by_date))
             self.steps.append("the {"+str(next_event_e_prime)+"}"+" event is the trigger event, it well be removed from the ordered list\n")
-            next_event_date_t_prime = ordered_events_by_date[next_event_e_prime]
+            next_event_date_t_prime = round(ordered_events_by_date[next_event_e_prime],1)
             initial_event_date_t_previous = next_event_date_t_prime
             self.steps.append("t' = " + str(initial_event_date_t_previous)+"\n")
             # print(current_state,next_event_e_prime)
