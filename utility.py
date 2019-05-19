@@ -1,3 +1,4 @@
+import numpy as np
 MAX_DIMENSION = 3
 TYPO_ERROR = 27
 
@@ -122,7 +123,7 @@ def set_of_possible_events_of_all_states(states, transitions):
         # adding events that can go from the state
         gamma[transition['source']].append(transition['event'])
         # adding events that can left or goes into the state
-        gamma[transition['destination']].append(transition['event'])
+        # gamma[transition['destination']].append(transition['event'])
     for state in gamma:
         # removing duplicate events added in the list, so we can have a list of unique events that can be triggered from the
         # corresponded state
@@ -136,3 +137,20 @@ def next_state(current_state, next_event, transitions):
 
 def still_active(event, state, gamma):
     return event in gamma[state]
+
+
+def random_durations_generator(events, lambdas):
+    durations = {}
+    for event in events:
+        durations[event] = []
+    for c in range(4):
+        for event in events:
+            v = -(1/lambdas[event][0])* np.log(1-np.random.uniform(0,1))
+            durations[event].append(round(v,1))
+    return durations
+
+def still_more_clocks(duration):
+    for event in duration:
+        if duration[event]:
+            return True
+    return False

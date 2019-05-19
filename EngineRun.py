@@ -1,6 +1,8 @@
 from tkinter import Tk, Canvas, Frame, BOTH
 import tkinter as tk
-from model import Simulator
+
+from InfiniteModel import InfiniteModel
+from model import Model
 
 
 class Example(Frame):
@@ -15,13 +17,20 @@ class Example(Frame):
 
         self.master.title("Calender")
         self.pack(fill=BOTH, expand=1)
-
+        print("1- Simulate finite automaton")
+        print("2- Simulate Infinite automaton")
+        choice_automaton = input("option 1 or 2 :")
+        calendar = []
+        model = None
+        if int(choice_automaton) == 2:
+            model = InfiniteModel()
+            calendar = model.calendar
+        elif int(choice_automaton) == 1:
+            model = Model()
+            calendar = model.calendar
         canvas = Canvas(self)
-        simulator = Simulator()
-        calender = simulator.calender
         steps = {}
         canvas.create_line(20, 200, 970, 200)
-
         i = 20
         step = -0.1
         while i <= 970:
@@ -35,10 +44,10 @@ class Example(Frame):
             steps[round(step,1)] = [i,205,195]
             i += 15.5
 
-        for i,c in enumerate(calender):
-                current_event_date = calender[i]['date']
-                if i+1 < len(calender):
-                    next_event_date = calender[i+1]['date']
+        for i,c in enumerate(calendar):
+                current_event_date = calendar[i]['date']
+                if i+1 < len(calendar):
+                    next_event_date = calendar[i+1]['date']
                     state_x_position = (steps[current_event_date][0] + steps[next_event_date][0])/2
                 else:
                     state_x_position = (steps[current_event_date][0] + 35)
@@ -50,15 +59,15 @@ class Example(Frame):
                     canvas.create_text(steps[current_event_date][0],215, text = str(current_event_date), font ='Helvetica 9 bold')
                     canvas.create_line(steps[current_event_date][0],205,steps[current_event_date][0],195)
         y = 360
-        for state in simulator.gamma:
-            canvas.create_text(50,y, text = "\u0393" + "(" +str(state)+ ") = "+"{"+str(simulator.gamma[state]).replace('[','').replace(']','')+"}",
+        for state in model.gamma:
+            canvas.create_text(50,y, text = "\u0393" + "(" +str(state)+ ") = "+"{"+str(model.gamma[state]).replace('[','').replace(']','')+"}",
                                font = 'Helvetica 10 bold' )
             y += 18
         y +=18
-        canvas.create_text(90, y, text= "E (set of events) = "+ str(simulator.user_input.events).replace('[','').replace(']',''),
+        canvas.create_text(90, y, text= "E (set of events) = "+ str(model.events).replace('[','').replace(']',''),
                            font = 'Helvetica 10 bold')
         y +=18
-        canvas.create_text(90, y, text= "X (set of states) = " + str(simulator.user_input.states).replace('[','').replace(']',''),
+        canvas.create_text(90, y, text= "X (set of states) = " + str(model.states).replace('[','').replace(']',''),
                            font = 'Helvetica 10 bold')
 
         canvas.pack(fill=BOTH, expand=1)

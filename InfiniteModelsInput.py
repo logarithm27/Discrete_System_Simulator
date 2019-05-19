@@ -16,7 +16,7 @@ class InfiniteModelInput:
             self.events = sorted(list(dict.fromkeys(self.extracting_data_from_description_file("E"))))
             self.states = sorted(list(dict.fromkeys(self.extracting_data_from_description_file("X"))))
             self.state_machine = {}
-            self.set_of_durations = self.get_durations()
+            self.lambdas = self.get_lambda()
             self.events_description = self.extracting_data_from_description_file("D")
             self.number_of_states = self.max_n_number_checker()
             self.max_bounds = self.get_bounds("max")
@@ -38,9 +38,9 @@ class InfiniteModelInput:
             data += str(single_content[0])
         if not self.invalid_description_error_message():
             return False
-        if "V" in skeleton_of_model or "v" in skeleton_of_model:
+        if "L" in skeleton_of_model or "l" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
-                if element_of_model.casefold().__eq__("V".casefold()):
+                if element_of_model.casefold().__eq__("L".casefold()):
                     how_many_durations += 1
             if "E" in skeleton_of_model or "e" in skeleton_of_model:
                 if len(self.extracting_data_from_description_file("E")) != how_many_durations:
@@ -55,8 +55,8 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("E") is None:
             print("Invalid description, put the set of events of your model and try again")
             return False
-        if self.extracting_data_from_description_file("V") is None:
-            print("Invalid description, enter the set of clocks 'V' and try again")
+        if self.extracting_data_from_description_file("L") is None:
+            print("Invalid description, lambdas")
             return False
         if self.extracting_data_from_description_file("D") is None:
             print("Invalid description, enter the set of events descriptions and try again")
@@ -64,8 +64,8 @@ class InfiniteModelInput:
         if self.extracting_data_from_description_file("D") is TYPO_ERROR:
             print("Your set of transition is invalid, maybe a typo error in your file, fix it and try again")
             return False
-        if self.get_durations() is None:
-            return False
+        # if self.get_lambda() is None:
+        #     return False
         if self.get_bounds("max") is None:
             print("Put the maximum bounds and try again")
             return False
@@ -78,7 +78,8 @@ class InfiniteModelInput:
         data = []
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
-                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace(character,"").replace(character.lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                single_content = single_content.strip(single_content[0])
+                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("=","").replace("[","").replace("]","").replace(" ",""))
                 if character.casefold() == "X".casefold():
                     data = replacing_delimiter(split_string, ",", ";")
                     for tup in data:
@@ -93,7 +94,7 @@ class InfiniteModelInput:
                         return None
                 elif character.casefold().__eq__("D".casefold()):
                     descriptions = from_string_to_dict_transitions(split_string,self.extracting_data_from_description_file("E"))
-                    if descriptions is not None:
+                    if descriptions is not None :
                         for description in descriptions:
                             if len(descriptions[description]) > MAX_DIMENSION or len(descriptions[description]) == 0 or len(self.extracting_data_from_description_file("X")[0]) != len(descriptions[description]):
                                 print("Inconsistent dimensions between states in the set of events description 'D' and the set of states 'X' ")
@@ -141,16 +142,16 @@ class InfiniteModelInput:
         return None
 
 
-    def get_durations(self):
+    def get_lambda(self):
         durations = {}
         for single_content in self.contents:
-            if "V".casefold() == single_content[0].casefold() and (single_content[1].__eq__("(") or single_content[1].__eq__("[")):
+            if "L".casefold() == single_content[0].casefold() and (single_content[1].__eq__("(") or single_content[1].__eq__("[")):
                 split_string = ""
                 for element in single_content:
                     if element != "=":
                         split_string += str(element)
                 if split_string[2] not in self.extracting_data_from_description_file("E"):
-                    print("can't handle V("+ split_string[2] +"), the following event {"+split_string[2]+"} doesn't exist, fix it and try again")
+                    print("can't handle l("+ split_string[2] +"), the following event {"+split_string[2]+"} doesn't exist, fix it and try again")
                     return None
                 elif split_string[2] in self.extracting_data_from_description_file("E"):
                     clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","").replace("{","").replace("}","").replace("[","").replace("]","")
@@ -158,7 +159,7 @@ class InfiniteModelInput:
                     try:
                         durations[split_string[2]] = list(map(float,clocks))
                     except None or SyntaxError or ValueError:
-                        print("Invalid list of clocks, try again")
+                        print("Invalid rate, try again")
                         return None
         return durations
 
