@@ -2,6 +2,9 @@ from utility import *
 MAX_DIMENSION = 3
 MAX_N = 15
 INVALID_MAX_N_ERROR = [-2,-1,0,1]
+INVALID_NUMBER_EXPERIENCE_ERROR = -100
+
+
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
@@ -167,7 +170,11 @@ class InfiniteModelInput:
     def get_number_of_experience(self):
         for single_content in self.contents:
             if "M".casefold() == single_content[0] and single_content[1] == "=":
-
+                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("M","").replace("M".lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                try:
+                    return int (split_string)
+                except ValueError or TypeError or SyntaxError:
+                    print("Invalid number of experiences, must be an integer, try again")
 
 if __name__ == "__main__":
     start = InfiniteModelInput()
