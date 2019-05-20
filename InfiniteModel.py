@@ -13,6 +13,8 @@ class InfiniteModel:
         self.max_number = self.start.number_of_states
         self.max_bounds = self.start.max_bounds
         self.min_bounds = self.start.min_bounds
+        self.number_of_experiences = self.start.number_of_experiences
+        self.time_interval = self.start.time_interval
         self.build_infinite_states()
         self.transitions = self.build_state_machine()
         self.states = list(map(str,self.states))
