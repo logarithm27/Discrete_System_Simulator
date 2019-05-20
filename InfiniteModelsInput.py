@@ -23,6 +23,8 @@ class InfiniteModelInput:
             self.number_of_states = self.max_n_number_checker()
             self.max_bounds = self.get_bounds("max")
             self.min_bounds = self.get_bounds("min")
+            self.number_of_experiences = self.get_number_of_experience()
+            self.time_interval = self.extracting_data_from_description_file("T")
             if self.number_of_states in INVALID_MAX_N_ERROR:
                 self.number_of_states = MAX_N
 
@@ -81,7 +83,7 @@ class InfiniteModelInput:
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(character.casefold()):
                 single_content = single_content.strip(single_content[0])
-                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                split_string = replace(single_content, ["{","}","=","[","]"," "])
                 if character.casefold() == "X".casefold():
                     data = replacing_delimiter(split_string, ",", ";")
                     for tup in data:
@@ -111,7 +113,7 @@ class InfiniteModelInput:
     def max_n_number_checker(self):
         for single_content in self.contents:
             if single_content[0].casefold().__eq__("N".casefold()):
-                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("N","").replace("N".lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                split_string = replace(single_content, ["{","}","=","[","]"," ", "N","n"])
                 try:
                     return int (split_string)
                 except ValueError or SyntaxError or TypeError:
@@ -122,7 +124,7 @@ class InfiniteModelInput:
     def get_bounds(self, max_or_min):
         for single_content in self.contents:
             if single_content[0].casefold().__eq__(max_or_min[0].casefold()) and single_content[1].casefold().__eq__(max_or_min[1].casefold()) and single_content[2].casefold().__eq__(max_or_min[2].casefold()):
-                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace(max_or_min+"_bounds","").replace(max_or_min.upper()+"_BOUNDS","").replace("=","").replace("[","").replace("]","").replace(" ","").replace("(","").replace(")",""))
+                split_string = replace(single_content,  ["{","}","=","[","]"," ",max_or_min+"_bounds", max_or_min.upper()+"_BOUNDS","(",")"])
                 bound = split_string.split(",")
                 for index, coordinate in enumerate(bound):
                     if coordinate == "N":
@@ -169,7 +171,7 @@ class InfiniteModelInput:
     def get_number_of_experience(self):
         for single_content in self.contents:
             if "M".casefold() == single_content[0] and single_content[1] == "=":
-                split_string = pass_commentaries(single_content.replace("{","").replace("}","").replace("M","").replace("M".lower(),"").replace("=","").replace("[","").replace("]","").replace(" ",""))
+                split_string = replace(single_content, ["{","}","=","[","]"," ","M","m"])
                 try:
                     m = int (split_string)
                     if m < 1:
@@ -179,6 +181,9 @@ class InfiniteModelInput:
                 except ValueError or TypeError or SyntaxError:
                     print("Invalid number of experiences, must be an integer, try again")
                     return INVALID_NUMBER_EXPERIENCE_ERROR
+        return None
+
+
 
 if __name__ == "__main__":
     start = InfiniteModelInput()

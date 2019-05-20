@@ -154,3 +154,8 @@ def still_more_clocks(duration):
         if duration[event]:
             return True
     return False
+
+def replace(string, characters):
+    while characters:
+        string = string.replace(characters.pop(0),"")
+    return pass_commentaries(string)
