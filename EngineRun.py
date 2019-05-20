@@ -19,7 +19,7 @@ class Example(Frame):
         self.pack(fill=BOTH, expand=1)
         print("1- Simulate finite automaton")
         print("2- Simulate Infinite automaton")
-        choice_automaton = input("option 1 or 2 :")
+        choice_automaton = input("option 1 or 2 : ")
         calendar = []
         model = None
         if int(choice_automaton) == 2:
@@ -33,7 +33,7 @@ class Example(Frame):
         canvas.create_line(20, 200, 1070, 200)
         i = 20
         step = -0.1
-        while i <= 1070:
+        while i <= 80700:
             step +=0.1
             # checker = step/0.5
             # if step >= 1:

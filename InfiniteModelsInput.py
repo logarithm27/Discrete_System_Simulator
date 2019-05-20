@@ -164,5 +164,10 @@ class InfiniteModelInput:
         return durations
 
 
+    def get_number_of_experience(self):
+        for single_content in self.contents:
+            if "M".casefold() == single_content[0] and single_content[1] == "=":
+
+
 if __name__ == "__main__":
     start = InfiniteModelInput()

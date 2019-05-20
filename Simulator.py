@@ -8,12 +8,14 @@ class Simulator:
         self.durations = durations
         self.gamma = gamma
         self.transitions = transitions
+        self.life = {}
 
     def simulate(self):
         counter = 1
         self.init_steps()
         ordered_events_by_date = {}
         initial_event_date_t_previous = 0.0
+
         self.calendar.append({'event': None, 'next_state': self.initial_state,
                  'clock': None, 'date': initial_event_date_t_previous})
         # if there we still have clock values on the durations list
@@ -71,6 +73,16 @@ class Simulator:
             self.steps.append("t' = " + str(0)+'\n')
 
     def output_simulation_details(self):
+        self.init_life()
         file = open("C:/Users/omarm/Desktop/output.txt","w")
         for s in self.steps:
             file.write(s)
+
+    def init_life(self):
+        events = list(self.gamma.keys())
+        for event in events:
+            self.life[event] = 0
+        for index,ev in enumerate(self.calendar[:-1]):
+            if ev['event'] in self.life:
+                self.life[ev['event']] = round(ev['date'] - self.life[ev['event']],1)
+                print(self.life)

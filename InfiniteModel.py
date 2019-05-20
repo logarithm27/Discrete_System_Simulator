@@ -26,8 +26,6 @@ class InfiniteModel:
             print(transition)
         for element in self.gamma:
             print(str(element) + ": " + str(self.gamma[element]))
-        for state in self.states:
-            print(state)
         for c in self.calendar:
             print(c)
 
