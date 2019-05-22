@@ -50,6 +50,8 @@ class InfiniteModel:
     def simulate(self):
         for event in self.events:
             self.stats[event] = 0
+        if self.number_of_experiences > 1:
+            print("Simulating ...")
         for counter in range(self.number_of_experiences):
             simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas, self.start.number_of_states),self.gamma,self.transitions)
             simulator.simulate()
@@ -67,8 +69,10 @@ class InfiniteModel:
         #     print(transition)
         # for element in self.gamma:
         #     print(str(element) + ": " + str(self.gamma[element]))
+        dates = []
         for c in self.calendar:
-            print(c)
+            dates.append(c['date'])
+        print(dates)
 
 if __name__ == "__main__":
     execution_time = float(timeit.timeit(lambda: InfiniteModel(), number=1))
