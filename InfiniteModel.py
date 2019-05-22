@@ -19,7 +19,9 @@ class InfiniteModel:
         self.transitions = self.build_state_machine()
         self.states = list(map(str,self.states))
         self.gamma = set_of_possible_events_of_all_states(self.states, self.transitions)
-        self.durations = random_durations_generator(self.events, self.lambdas)
+        self.durations = random_durations_generator(self.events, self.lambdas, self.start.number_of_states)
+        self.time_interval = self.start.time_interval
+        self.stats = {}
         self.calendar = []
         self.simulate()
 
@@ -46,16 +48,25 @@ class InfiniteModel:
             max_n += 1
 
     def simulate(self):
-        for duration in self.durations:
-            print(self.durations[duration])
-        simulator = Simulator(self.states[0],self.durations,self.gamma,self.transitions)
-        simulator.simulate()
-        self.calendar = simulator.calendar
-        simulator.output_simulation_details()
-        for transition in self.transitions:
-            print(transition)
-        for element in self.gamma:
-            print(str(element) + ": " + str(self.gamma[element]))
+        for event in self.events:
+            self.stats[event] = 0
+        for counter in range(self.number_of_experiences):
+            simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas, self.start.number_of_states),self.gamma,self.transitions)
+            simulator.simulate()
+            self.calendar = simulator.calendar
+            if self.number_of_experiences != 1:
+                for c in self.calendar:
+                    if self.time_interval[0] <= c['date'] <= self.time_interval[1]:
+                        self.stats[c['event']] += 1
+        if self.number_of_experiences != 1:
+            for event in self.stats:
+                self.stats[event] = round(self.stats[event]/(self.time_interval[1] - self.time_interval[0]),1)
+                print(str(event)+" : "+str(self.stats[event]))
+        # simulator.output_simulation_details()
+        # for transition in self.transitions:
+        #     print(transition)
+        # for element in self.gamma:
+        #     print(str(element) + ": " + str(self.gamma[element]))
         for c in self.calendar:
             print(c)
 

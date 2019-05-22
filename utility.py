@@ -139,11 +139,11 @@ def still_active(event, state, gamma):
     return event in gamma[state]
 
 
-def random_durations_generator(events, lambdas):
+def random_durations_generator(events, lambdas, max_N):
     durations = {}
     for event in events:
         durations[event] = []
-    for c in range(100):
+    for c in range(max_N):
         for event in events:
             v = -(1/lambdas[event][0])* np.log(1-np.random.uniform(0,1))
             durations[event].append(round(v,1))

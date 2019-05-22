@@ -24,6 +24,8 @@ class InfiniteModelInput:
             self.max_bounds = self.get_bounds("max")
             self.min_bounds = self.get_bounds("min")
             self.number_of_experiences = self.get_number_of_experience()
+            if self.number_of_experiences is None:
+                self.number_of_experiences = 1
             self.time_interval = self.extracting_data_from_description_file("T")
             if self.time_interval is not None:
                 self.time_interval = list(map(int,self.time_interval))
