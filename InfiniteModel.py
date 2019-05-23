@@ -4,6 +4,8 @@ from InfiniteModelsInput import *
 from utility import *
 import datetime
 
+
+# noinspection PyUnboundLocalVariable
 class InfiniteModel:
     def __init__(self):
         self.sigma_debits = {}
