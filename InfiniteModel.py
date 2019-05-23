@@ -62,15 +62,22 @@ class InfiniteModel:
             simulator.simulate()
             self.calendar = simulator.calendar
             for index,c in enumerate(self.calendar[:-1]):
+                # if the date that corresponds to the activation of an event is between the given date interval
                 if self.time_interval[0] < c['date'] < self.time_interval[1]:
+                    # increment the occurrence counter
                     self.stats[c['event']] += 1
                 if self.time_interval[0] < c['date'] < self.time_interval[1]:
                     self.state_probabilities[c['next_state']] += 1
+            # still inside the simulation, iterating through calculated occurrence of each event
             for event in self.stats:
+                # calculate the debit by dividing number of occurrence of each event by T2 - T1
                 self.stats[event] = self.stats[event]/(self.time_interval[1] - self.time_interval[0])
+                # while we're inside the main loop ( number of experiences, simulations ) we add the calculated debit
+                # that corresponds to a particular event to the new one ( we build a sum of debits for each event)
                 self.sigma_debits[event] += self.stats[event]
-
+        # by the end the simulations
         for single_sigma_debit in self.sigma_debits:
+            # dividing the sum of debits of each event by the number of experiences to get a new debit
             self.sigma_debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
             print(str(single_sigma_debit) + " : " + str(self.sigma_debits[single_sigma_debit]))
         # for state in self.state_probabilities:
