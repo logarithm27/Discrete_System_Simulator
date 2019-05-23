@@ -59,7 +59,7 @@ class Example(Frame):
                 current_event_date = calendar[i]['date']
                 if i+1 < len(calendar):
                     next_event_date = calendar[i+1]['date']
-                    state_x_position = (steps[current_event_date][0] + steps[next_event_date][0])/2
+                    state_x_position = int((steps[current_event_date][0] + steps[next_event_date][0])/2)
                 else:
                     state_x_position = (steps[current_event_date][0] + 35)
                 state_y_position = 185
