@@ -51,9 +51,7 @@ class Simulator:
             next_event_date_t_prime = round(ordered_events_by_date[next_event_e_prime],1)
             initial_event_date_t_previous = next_event_date_t_prime
             self.steps.append("t' = " + str(initial_event_date_t_previous)+"\n")
-            # print(current_state,next_event_e_prime)
             next_state_x_prime = next_state(current_state, next_event_e_prime, self.transitions)
-            # print(next_state_x_prime)
             ordered_events_by_date.pop(next_event_e_prime)
             # get all events except the trigger event that are available on the ordered list
             events = list(ordered_events_by_date.keys())
