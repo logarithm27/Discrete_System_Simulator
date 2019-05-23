@@ -6,6 +6,7 @@ import datetime
 
 class InfiniteModel:
     def __init__(self):
+        self.sigma_debits = {}
         self.start = InfiniteModelInput()
         self.events = self.start.events
         self.states = self.start.states
@@ -52,41 +53,41 @@ class InfiniteModel:
     def simulate(self):
         for event in self.events:
             self.stats[event] = 0
+            self.sigma_debits[event] = 0
         for state in self.states:
             self.state_probabilities[state] = 0
-        date_interval = 0
         print("Simulating ...")
         for counter in range(self.number_of_experiences):
             simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas, self.start.number_of_states),self.gamma,self.transitions)
             simulator.simulate()
             self.calendar = simulator.calendar
-            if self.number_of_experiences != 1:
-                for index,c in enumerate(self.calendar[:-1]):
-                    if self.time_interval[0] < c['date'] < self.time_interval[1] and self.calendar[index-1]['event'] != self.calendar[index]['event']:
-                        self.stats[c['event']] += 1
-                    if self.time_interval[0] < c['date'] < self.time_interval[1] and self.calendar[index-1]['next_state'] != self.calendar[index]['next_state']:
-                        self.state_probabilities[c['next_state']] += 1
-            date_interval += self.calendar[-1]['date']
-        date_interval = round(date_interval/self.number_of_experiences,1)
-        if self.number_of_experiences != 1:
+            for index,c in enumerate(self.calendar[:-1]):
+                if self.time_interval[0] < c['date'] < self.time_interval[1]:
+                    self.stats[c['event']] += 1
+                if self.time_interval[0] < c['date'] < self.time_interval[1]:
+                    self.state_probabilities[c['next_state']] += 1
             for event in self.stats:
-                self.stats[event] = round(self.stats[event]/(self.time_interval[1] - self.time_interval[0]),1)
-                print(str(event)+" : "+str(self.stats[event]))
-            for state in self.state_probabilities:
-                # number of times that the state appeared in all experiments divided by the total number of experiments
-                number_of_occurrence = self.state_probabilities[state] / self.number_of_experiences
-                # rate, calculating lambda by dividing the number of occurrences by the date interval ( between 0 and the last date )
-                lambda_state= number_of_occurrence/date_interval
-                # probability that this state may appear before T1 (start of the given time interval) in the time interval
-                p_t_1 = 1 - np.exp(-lambda_state * self.time_interval[0])
-                # probability that this state may appear before T2 (end of the given time interval) in the time interval
-                p_t_2 = 1 - np.exp(-lambda_state * self.time_interval[1])
-                # probability that this state may appear between the given time interval :
-                self.state_probabilities[state] = (p_t_2 - p_t_1), lambda_state, number_of_occurrence
-            file = open("C:/Users/omarm/Desktop/probability.txt","w")
-            file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability, Lambda, number of occurrence" + "\n")
-            for s in self.state_probabilities:
-                file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(s)+") = " +str(self.state_probabilities[s]) + "\n")
+                self.stats[event] = self.stats[event]/(self.time_interval[1] - self.time_interval[0])
+                self.sigma_debits[event] += self.stats[event]
+
+        for single_sigma_debit in self.sigma_debits:
+            self.sigma_debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
+            print(str(single_sigma_debit) + " : " + str(self.sigma_debits[single_sigma_debit]))
+        # for state in self.state_probabilities:
+        #     # number of times that the state appeared in all experiments divided by the total number of experiments
+        #     number_of_occurrence = self.state_probabilities[state] / self.number_of_experiences
+        #     # rate, calculating lambda by dividing the number of occurrences by the date interval ( between 0 and the last date )
+        #     lambda_state= number_of_occurrence/date_interval
+        #     # probability that this state may appear before T1 (start of the given time interval) in the time interval
+        #     p_t_1 = 1 - np.exp(-lambda_state * self.time_interval[0])
+        #     # probability that this state may appear before T2 (end of the given time interval) in the time interval
+        #     p_t_2 = 1 - np.exp(-lambda_state * self.time_interval[1])
+        #     # probability that this state may appear between the given time interval :
+        #     self.state_probabilities[state] = (p_t_2 - p_t_1), lambda_state, number_of_occurrence
+        #     file = open("C:/Users/omarm/Desktop/probability.txt","w")
+        #     file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability, Lambda, number of occurrence" + "\n")
+        #     for s in self.state_probabilities:
+        #         file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(s)+") = " +str(self.state_probabilities[s]) + "\n")
         simulator.output_simulation_details()
         for transition in self.transitions:
             print(transition)

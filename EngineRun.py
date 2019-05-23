@@ -72,7 +72,7 @@ class Example(Frame):
         y = 360
         if choice == "infinite":
             for event in model.stats:
-                canvas.create_text(50,y, text = "N" + "(" +str(event)+ ") = "+str(model.stats[event]),
+                canvas.create_text(50,y, text = "N" + "(" +str(event)+ ") = "+str(model.sigma_debits[event]),
                                    font = 'Helvetica 10 bold' )
                 y += 18
 
