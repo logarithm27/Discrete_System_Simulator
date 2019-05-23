@@ -1,4 +1,5 @@
 from utility import *
+import datetime
 
 class Simulator:
     def __init__(self, initial_state, durations, gamma,transitions):
@@ -73,6 +74,7 @@ class Simulator:
     def output_simulation_details(self):
         self.init_life()
         file = open("C:/Users/omarm/Desktop/output.txt","w")
+        file.write(str(datetime.datetime.now())+"\n")
         for s in self.steps:
             file.write(s)
 

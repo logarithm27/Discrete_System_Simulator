@@ -2,6 +2,7 @@ import timeit
 from Simulator import *
 from InfiniteModelsInput import *
 from utility import *
+import datetime
 
 class InfiniteModel:
     def __init__(self):
@@ -83,7 +84,7 @@ class InfiniteModel:
                 # probability that this state may appear between the given time interval :
                 self.state_probabilities[state] = (p_t_2 - p_t_1), lambda_state, number_of_occurrence
             file = open("C:/Users/omarm/Desktop/probability.txt","w")
-            file.write("P[ T1 < t < T2] (State X) = Probability, Lambda, number of occurrence" + "\n")
+            file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability, Lambda, number of occurrence" + "\n")
             for s in self.state_probabilities:
                 file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(s)+") = " +str(self.state_probabilities[s]) + "\n")
         simulator.output_simulation_details()
