@@ -71,8 +71,8 @@ class Example(Frame):
                     canvas.create_line(steps[current_event_date][0],205,steps[current_event_date][0],195)
         y = 360
         if choice == "infinite":
-            for event in model.stats:
-                canvas.create_text(50,y, text = "N" + "(" +str(event)+ ") = "+str(model.sigma_debits[event]),
+            for event in model.debits:
+                canvas.create_text(50,y, text = "N" + "(" +str(event)+ ") = "+str(model.debits[event]),
                                    font = 'Helvetica 10 bold' )
                 y += 18
 
