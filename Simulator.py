@@ -10,6 +10,8 @@ class Simulator:
         # each dictionary has four keys : event, next state, clock, date
         # the event key represent the event that's being triggered
         # the date key represent the date when the event is triggered
+        # the clock is used only if use the method where we're updating the clock by doing some calculations
+        # the clock is None or null if we use the simple method, where we stock and order events in a list by their dates
         # next state is the state that will be active starting from the corresponding date when the event is triggered to the next the date
         # event 1                                     event 2
         #   |                                           |
@@ -51,15 +53,38 @@ class Simulator:
 
     def simulate(self):
         counter = 1
+        # initializing the steps list with and introduction string
         self.init_steps()
+        # this variable is a dictionary that contains events ordered by their date
+        # i.e {(arrive,1),(leave,2)...}
+        # this data structure help us to build the timing after the simulation by memorising the order temporarily
+        # because the calendar is the data structure used to build the timing graph
         ordered_events_by_date = {}
+        # this is the initial date where the simulation is starting from
         initial_event_date_t_previous = 0.0
-
+        # initialize the calendar with initial values
         self.calendar.append({'event': None, 'next_state': self.initial_state,
                  'clock': None, 'date': initial_event_date_t_previous})
-        # if there we still have clock values on the durations list
+        # still more clocks has two features depending on the type of generating the clocks ( random or not )
+        # if we generate clocks randomly, then we should have the last date reached in the simulation by having ( self.calendar[-1]['date'] )
+        # and the time limit ( the date which represents the max bounds in the given interval )
+        # Normally, self.durations is useless, but we still need it as a parameter to run the function properly
+        # because we may not generate clocks randomly, and instead of that we'll need a given list of durations, and at that time
+        # self.durations become extremely useful
+        # in summary, if we generate clocks randomly, we will need all parameters except the self.durations will be None
+        # if we have a given list of durations, we will need self.durations and self.random_or_not variables
+        # and we're no longer needing the other variables
+        # And instead of creating different functions and doing the boring job by repeating the code,
+        # I prefer to use the same function for both kind of options ( there's other smarter ways to do it ) ,
+        # so notice that all parameters are useful and useless depending on the situation
+        # note that when we're calling the constructor we can designate the useless parameters by putting None keyword
+        # don't put None Keyword on a parameter that's paramount and useful i.e : don't put None keyword in the parameter
+        # time_limit when you're generating clocks randomly
         while still_more_clocks(self.durations, self.random_or_not, self.calendar[-1]['date'], self.time_limit):
+            # while we're not reaching the end of the simulation we check if we generate clocks randomly
+            # note that when we generate clocks randomly, we need to generate it each time for each event
             if self.random_or_not == RANDOM:
+                # generate random clocks for that iteration
                 self.durations = random_durations_generator(self.events, self.lambdas)
             self.steps.append(str(counter) + " iteration :"+"\n"+"-------------"+"\n")
             # get the current state from the last added state from the calender dictionary
@@ -75,7 +100,8 @@ class Simulator:
                 if not self.durations[event]:
                     self.steps.append("the {"+event+"}" +
                              " event is active, but all corresponding clocks are already used "+'\n')
-                if event not in ordered_events_by_date: # if the event is not already on the ordered list
+                # if the event is not already on the ordered list
+                if event not in ordered_events_by_date:
                     if self.durations[event]:
                         clock = self.durations[event].pop(0)
                         ordered_events_by_date[event] = initial_event_date_t_previous + clock
@@ -107,9 +133,12 @@ class Simulator:
             counter +=1
 
     def init_steps(self):
-        for event in self.durations:
-            self.steps.append("initial clock list for the {" + event +"}" +" event : " + str(self.durations[event]) + "\n")
-            self.steps.append("t' = " + str(0)+'\n')
+        if self.durations is not None:
+            for event in self.durations:
+                self.steps.append("initial clock list for the {" + event +"}" +" event : " + str(self.durations[event]) + "\n")
+                self.steps.append("t' = " + str(0)+'\n')
+        else :
+            self.steps.append("Clocks are generated randomly" + "\n")
 
     def output_simulation_details(self):
         file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/steps.txt","w")
