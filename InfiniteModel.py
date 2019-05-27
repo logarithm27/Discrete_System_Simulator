@@ -61,7 +61,7 @@ class InfiniteModel:
             self.sigma_probabilities[state] = 0
         print("Simulating ...")
         for counter in range(self.number_of_experiences):
-            simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas),self.gamma,self.transitions, INFINITE, self.time_interval[1], self.events, self.lambdas)
+            simulator = Simulator(self.states[0], random_durations_generator(self.events, self.lambdas), self.gamma, self.transitions, RANDOM, self.time_interval[1], self.events, self.lambdas)
             simulator.simulate()
             self.calendar = simulator.calendar
             for index,c in enumerate(self.calendar[:-1]):

@@ -1,8 +1,8 @@
 import numpy as np
 MAX_DIMENSION = 3
 TYPO_ERROR = 27
-FINITE = 0
-INFINITE = 1
+NON_RANDOM = 0
+RANDOM = 1
 
 def asking_for_input(ask_for_number_of_data, ask_for_data):
     try:
@@ -149,12 +149,12 @@ def random_durations_generator(events, lambdas):
         durations[event].append(round(v,1))
     return durations
 
-def still_more_clocks(duration, automaton_type,date, limit_time):
-    if automaton_type == FINITE:
+def still_more_clocks(duration, random_or_not, date, limit_time):
+    if random_or_not == NON_RANDOM:
         for event in duration:
             if duration[event]:
                 return True
-    if automaton_type == INFINITE:
+    if random_or_not == RANDOM:
         if date < limit_time:
             return True
     return False

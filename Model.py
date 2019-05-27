@@ -38,7 +38,7 @@ class Model:
 
     # without updating the clock value each time
     def simulate_simple_way(self):
-        simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], FINITE, None, None, None)
+        simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], NON_RANDOM, None, None, None)
         simulator.simulate()
         simulator.output_simulation_details()
         self.calendar = simulator.calendar

@@ -10,7 +10,7 @@ class Simulator:
         self.gamma = gamma
         self.transitions = transitions
         self.life = {}
-        self.automaton_type = automaton_type
+        self.random_or_not = automaton_type
         self.time_limit = time_limit
         self.lambdas = lambdas
         self.events = events
@@ -24,8 +24,8 @@ class Simulator:
         self.calendar.append({'event': None, 'next_state': self.initial_state,
                  'clock': None, 'date': initial_event_date_t_previous})
         # if there we still have clock values on the durations list
-        while still_more_clocks(self.durations,self.automaton_type,self.calendar[-1]['date'],self.time_limit):
-            if self.automaton_type == INFINITE:
+        while still_more_clocks(self.durations, self.random_or_not, self.calendar[-1]['date'], self.time_limit):
+            if self.random_or_not == RANDOM:
                 self.durations = random_durations_generator(self.events, self.lambdas)
             self.steps.append(str(counter) + " iteration :"+"\n"+"-------------"+"\n")
             # get the current state from the last added state from the calender dictionary
