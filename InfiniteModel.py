@@ -1,4 +1,3 @@
-import os
 import timeit
 from Simulator import *
 from InfiniteModelsInput import *
