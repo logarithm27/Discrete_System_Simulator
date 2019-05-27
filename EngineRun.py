@@ -2,7 +2,7 @@ from tkinter import *
 import tkinter as tk
 
 from InfiniteModel import InfiniteModel
-from model import Model
+from Model import Model
 
 
 class Example(Frame):

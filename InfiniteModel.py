@@ -1,7 +1,7 @@
 import timeit
 from Simulator import *
 from InfiniteModelsInput import *
-from utility import *
+from Utility import *
 import datetime
 
 

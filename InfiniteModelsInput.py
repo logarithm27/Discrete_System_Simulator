@@ -1,4 +1,4 @@
-from utility import *
+from Utility import *
 MAX_DIMENSION = 3
 MAX_N = 15
 INVALID_MAX_N_ERROR = [-2,-1,0,1]

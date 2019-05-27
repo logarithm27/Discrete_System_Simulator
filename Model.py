@@ -1,6 +1,6 @@
 from Input import Input
 from Simulator import *
-from utility import *
+from Utility import *
 
 
 class Model:
