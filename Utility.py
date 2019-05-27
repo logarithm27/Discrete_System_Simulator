@@ -1,7 +1,8 @@
 import numpy as np
 MAX_DIMENSION = 3
 TYPO_ERROR = 27
-
+FINITE = 0
+INFINITE = 1
 
 def asking_for_input(ask_for_number_of_data, ask_for_data):
     try:
@@ -139,19 +140,22 @@ def still_active(event, state, gamma):
     return event in gamma[state]
 
 
-def random_durations_generator(events, lambdas, max_N):
+def random_durations_generator(events, lambdas):
     durations = {}
     for event in events:
         durations[event] = []
-    for c in range(100):
-        for event in events:
-            v = -(1/lambdas[event][0])* np.log(1-np.random.uniform(0,1))
-            durations[event].append(round(v,1))
+    for event in events:
+        v = -(1/lambdas[event][0])* np.log(1-np.random.uniform(0,1))
+        durations[event].append(round(v,1))
     return durations
 
-def still_more_clocks(duration):
-    for event in duration:
-        if duration[event]:
+def still_more_clocks(duration, automaton_type,date, limit_time):
+    if automaton_type == FINITE:
+        for event in duration:
+            if duration[event]:
+                return True
+    if automaton_type == INFINITE:
+        if date < limit_time:
             return True
     return False
 

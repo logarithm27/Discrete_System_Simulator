@@ -22,7 +22,6 @@ class InfiniteModel:
         self.transitions = self.build_state_machine()
         self.states = list(map(str,self.states))
         self.gamma = set_of_possible_events_of_all_states(self.states, self.transitions)
-        self.durations = random_durations_generator(self.events, self.lambdas, self.start.number_of_states)
         self.time_interval = self.start.time_interval
         self.debits = {}
         self.sigma_debits = {}
@@ -62,7 +61,7 @@ class InfiniteModel:
             self.sigma_probabilities[state] = 0
         print("Simulating ...")
         for counter in range(self.number_of_experiences):
-            simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas, self.start.number_of_states),self.gamma,self.transitions)
+            simulator = Simulator(self.states[0],random_durations_generator(self.events, self.lambdas),self.gamma,self.transitions, INFINITE, self.time_interval[1], self.events, self.lambdas)
             simulator.simulate()
             self.calendar = simulator.calendar
             for index,c in enumerate(self.calendar[:-1]):
