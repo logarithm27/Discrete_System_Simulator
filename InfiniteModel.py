@@ -70,16 +70,34 @@ class InfiniteModel:
                 if self.time_interval[0] < c['date'] < self.time_interval[1]:
                     # increment the occurrence counter
                     self.debits[c['event']] += 1
-                interval_state_active = self.calendar[index + 1]['date'] - self.calendar[index]['date']
-                if self.time_interval[0] < self.calendar[index + 1]['date'] < self.time_interval[1]:
-                    if self.calendar[index]['date'] <= self.time_interval[0]:
-                        interval_state_active -= self.time_interval[0] - self.calendar[index]['date']
-                    self.state_probabilities[c['next_state']] += interval_state_active
-                if self.time_interval[0] < self.calendar[index]['date'] <= self.time_interval[1] < self.calendar[index + 1]['date']:
+                # -------calculating probabilities of each state being active in the given interval--------
+                # initialize the variable that will be used to calculate the time interval where each state is active
+                interval_state_active = 0
+                # if the state is active between an interval ot time that began with a value less than the minimum value
+                # or the minimum bound given in the interval ot time and a value less than or equal to the maximum bound or value in the time interval
+                if self.calendar[index]['date'] <= self.time_interval[0] < self.calendar[index + 1]['date'] <= self.time_interval[1]:
+                    # the state is active between [ the minimum value given in the time interval - the date when the state is no longer active ]
+                    interval_state_active = self.calendar[index + 1]['date'] - self.time_interval[0]
+                # if the state is active between the given time interval
+                if self.time_interval[0]<= self.calendar[index]['date'] < self.calendar[index +1]['date'] <= self.time_interval[1]:
+                    interval_state_active = self.calendar[index + 1]['date'] - self.calendar[index]['date']
+                # if the state is active between a date greater than the minimum bound or value and a value that's greater
+                # than the maximum bound of the given time interval
+                if self.time_interval[0] <= self.calendar[index]['date'] <= self.time_interval[1] < self.calendar[index + 1]['date']:
+                    # state is active on [ the start date when the state is being active - maximum bound ]
                     interval_state_active = self.time_interval[1] - self.calendar[index]['date']
-                    self.state_probabilities[c['next_state']] += interval_state_active
+                # each state has it's own probability, each time we face that state, with add the corresponding interval time of being active
+                # we add that date as long as we're going until the end of the simulation
+                # this is not the real probability for now, it will be calculated later, for now we're using the same variable for adding the dates
+                self.state_probabilities[c['next_state']] += interval_state_active
+            # after collecting data and counting the probabilities of state activity status
             for state in self.state_probabilities:
+                # we now calculate the probabilities, by dividing each value calculated previously ( sum intervals where each state was active ) by the
+                # subtracting the max bound by the min bound
                 self.state_probabilities[state] = self.state_probabilities[state]/(self.time_interval[1] - self.time_interval[0])
+                # for statistical use, as long as we go through the number of simulation, we add the calculated probability
+                # i.e : we have 100 simulation, the sigma ( sum of probabilities ) will be the sum of probabilities 100 times
+                # note that each state has it's own probability
                 self.sigma_probabilities[state] += self.state_probabilities[state]
             # still inside the simulation, iterating through calculated occurrence of each event
             for event in self.debits:
@@ -88,15 +106,14 @@ class InfiniteModel:
                 # while we're inside the main loop ( number of experiences, simulations ) we add the calculated debit
                 # that corresponds to a particular event to the new one ( we build a sum of debits for each event)
                 self.sigma_debits[event] += self.debits[event]
+        # by the end of all simulations
         for state in self.sigma_probabilities:
+            # we calculate the final probability of each state by dividing the sigma by the number of simulations
             self.state_probabilities[state] = round((self.sigma_probabilities[state]/self.number_of_experiences),4)
-            print(str(state)+" : " + str(self.state_probabilities[state]))
         # by the end the simulations
         for single_sigma_debit in self.sigma_debits:
             # dividing the sum of debits of each event by the number of experiences to get a new debit
             self.debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
-            print(str(single_sigma_debit) + " : " + str(self.sigma_debits[single_sigma_debit]))
-
         file = open("C:/Users/omarm/Desktop/probability.txt","w")
         file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability" + "\n")
         for state in self.state_probabilities:
