@@ -1,18 +1,52 @@
+import os
+
 from Utility import *
 import datetime
 
 class Simulator:
-    def __init__(self, initial_state, durations, gamma,transitions, automaton_type, time_limit, events, lambdas):
+    def __init__(self, initial_state, durations, gamma, transitions, random_or_not, time_limit, events, lambdas):
+        # calendar is the data structure used to hold the timing information
+        # each element in the calendar is a dictionary
+        # each dictionary has four keys : event, next state, clock, date
+        # the event key represent the event that's being triggered
+        # the date key represent the date when the event is triggered
+        # next state is the state that will be active starting from the corresponding date when the event is triggered to the next the date
+        # event 1                                     event 2
+        #   |                                           |
+        #   |------------- STATE X ---------------------|
+        # t=1                                          t=2
+        # the date when an event is triggered is the start date when a state is being active, and the next date that corresponds to next event triggering
+        # is corresponding to the end or the date when the state is no longer active ( or may be it will be active again )
+        # each key contain a value, i.e 'event' : Arriving_event 'date': 2.3 ...
         self.calendar = []
+        # steps is a list that collects information of steps that being used along each simulation in order to output it in file at the end
         self.steps = []
+        # given initial state in order to start simulation from that state
         self.initial_state = initial_state
+        # the list of durations given by the user if he don't want to generate it randomly
         self.durations = durations
+        # gamma is a dictionary that contains states as keys, and values as list of events
+        # gamma is used to look up for active events or possible events from a particular state
+        # i.e : gamma(1)=[arrive, leave] ===> if we're on the state '1', we have then two possible events : arrive and leave
         self.gamma = gamma
+        # transitions : is data structure used in order to represent the different transitions in a model
+        # transitions id list of dictionaries, each element (dictionary) contain a particular transition,
+        # each transition (element, dictionary) have 3 keys : event, source, destination
+        # i.e event : arrive, source : X1, destination : X2 ---> it means from the state X1, if we trigger the 'arrive' event, we're going to the new state X2
         self.transitions = transitions
-        self.life = {}
-        self.random_or_not = automaton_type
+        # this variable is used to distinguish between the two types of durations used in the simulation
+        # if it's random, then we can generate the clocks randomly
+        # this will be used in still_more_clocks function inside the simulate function
+        self.random_or_not = random_or_not
+        # time limit is a variable used only if we simulate an infinite model from an input file
+        # it's used in the still_more_clocks function inside the simulate function in order to determine if we stop the simulation at that
+        # date limit or not, i.e : if we reach simulation at a date greater thant the time_limit, then we've reached the end of the simulation
         self.time_limit = time_limit
+        # lambdas is a dictionary, the keys are the events, and the values are ordinary values
+        # lambdas is used in order to generate random clocks in random_durations_generator function (Utility file)
+        # each lambda is used in an exponential distribution equation (equation used to generate the random clocks )
         self.lambdas = lambdas
+        # the events represents the list of events
         self.events = events
 
     def simulate(self):
@@ -78,17 +112,7 @@ class Simulator:
             self.steps.append("t' = " + str(0)+'\n')
 
     def output_simulation_details(self):
-        self.init_life()
-        file = open("C:/Users/omarm/Desktop/output.txt","w")
+        file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/steps.txt","w")
         file.write(str(datetime.datetime.now())+"\n")
         for s in self.steps:
             file.write(s)
-
-    def init_life(self):
-        events = list(self.gamma.keys())
-        for event in events:
-            self.life[event] = 0
-        for index,ev in enumerate(self.calendar[:-1]):
-            if ev['event'] in self.life:
-                self.life[ev['event']] = round(ev['date'] - self.life[ev['event']],1)
-                print(self.life)

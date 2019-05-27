@@ -1,9 +1,11 @@
+import os
 import timeit
 from Simulator import *
 from InfiniteModelsInput import *
 from Utility import *
 import datetime
-
+import plotly
+import plotly.graph_objs as go
 
 # noinspection PyUnboundLocalVariable
 class InfiniteModel:
@@ -113,10 +115,19 @@ class InfiniteModel:
         for single_sigma_debit in self.sigma_debits:
             # dividing the sum of debits of each event by the number of experiences to get a new debit
             self.debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
-        file = open("C:/Users/omarm/Desktop/probability.txt","w")
+        # get current directory path
+        file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/probability.txt","w")
         file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability" + "\n")
+        x_axis_data = []
+        y_axis_data = []
         for state in self.state_probabilities:
+            x_axis_data.append(state)
+            y_axis_data.append(self.state_probabilities[state])
             file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(state)+") = " +str(self.state_probabilities[state]) + "\n")
+        plotly.offline.plot({
+            "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
+            "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval))
+        }, auto_open=True)
         simulator.output_simulation_details()
         for transition in self.transitions:
             print(transition)
