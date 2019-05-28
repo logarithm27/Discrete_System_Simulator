@@ -91,19 +91,25 @@ class Simulator:
             current_state = self.calendar[-1]['next_state']
             # get the possible active events by passing the current state inside the gamma function
             active_events = self.gamma[current_state]
-            # looping through the active events
             self.steps.append("("+str(current_state)+")" +
                      "is the current state"+'\n')
             self.steps.append("active events for current state : "+"Gamma"+"("+str(current_state)+")=" +
                      str(active_events)+'\n')
+            # looping through the active events
             for event in active_events:
                 if not self.durations[event]:
                     self.steps.append("the {"+event+"}" +
                              " event is active, but all corresponding clocks are already used "+'\n')
-                # if the event is not already on the ordered list
+                # if the event is not already on the ordered list ( we will not update the date to an existing event in the ordered list)
                 if event not in ordered_events_by_date:
+                    # we won't use the list that holds clocks that corresponds to a particular event if and only if it have
+                    # an item ( clock )
+                    # i.e : the event arrive have the list of clocks [1.6,2], the event leave have an empty list []
+                    # so if we encounter the arrive event we will pop 1.6 as the clock and we will use it to update the time
+                    # but if we encounter the leave event, we will not pop any item because of the emptiness of the it's duration list
                     if self.durations[event]:
                         clock = self.durations[event].pop(0)
+                        # update the date that corresponds to an event by adding the clock from the list duration
                         ordered_events_by_date[event] = initial_event_date_t_previous + clock
                         self.steps.append("{"+str(event)+"}" +
                                  " event is active, "+"the corresponding clock '"+
@@ -111,27 +117,40 @@ class Simulator:
                                  str(initial_event_date_t_previous)+ '\n')
             for event in self.durations:
                 self.steps.append("clock list for the {"+str(event)+"} "+" event : " +str(self.durations[event])+"\n")
+            # ordering the list of events by their dates i.e : {'arrive': 1.6, 'leave':2 ...}
             ordered_events_by_date = sort_by_date(ordered_events_by_date)
             self.steps.append("ordered list " +str(ordered_events_by_date) + '\n')
+            # the event that will be added to the calendar is the first element of the ordered list ( the event who have the smallest date value )
             next_event_e_prime = next(iter(ordered_events_by_date))
             self.steps.append("the {"+str(next_event_e_prime)+"}"+" event is the trigger event, it well be removed from the ordered list\n")
+            # get the corresponding date of the trigger event (next_event_e_prime) and round it to 1 digit after the comma ( floating number )
             next_event_date_t_prime = round(ordered_events_by_date[next_event_e_prime],1)
+            # updating the date that will be used next time and added to a clock
+            # i.e the event arrive happens at the 1.5 date, and the next event will be the leave event and it has a clock of 0.5
+            # so the next date will be 0.5+1.5 = 2 , then the leave event will happen at a date 't' equals to 2
             initial_event_date_t_previous = next_event_date_t_prime
             self.steps.append("t' = " + str(initial_event_date_t_previous)+"\n")
+            # get the next state by knowing the current state we're in and next event that will be triggered starting from this current state
             next_state_x_prime = next_state(current_state, next_event_e_prime, self.transitions)
+            # after memorizing the event in the next_event_e_prime variable
+            # and the date in the next_event_date_t_prime that will be used as the next event that will be triggered
+            # we don't no longer need this information, then we will pop or remove this events and it's corresponding date from the
+            # ordered list
             ordered_events_by_date.pop(next_event_e_prime)
-            # get all events except the trigger event that are available on the ordered list
+            # get all events except the trigger event (because it was removed) that are available on the ordered list
             events = list(ordered_events_by_date.keys())
             # for every active events in the current state, test if this will be active on the next state, if it's not then remove it
             for event in events:
                 if not still_active(event,next_state_x_prime, self.gamma):
                     ordered_events_by_date.pop(event)
                     self.steps.append("the event {" +str(event) +"} will be removed because it's not active in the next state"+ '\n')
+            # the calendar will hold and memorize all the variable used above (trigger event, next state , date ..)
             self.calendar.append(
                 {'event': next_event_e_prime, 'next_state': next_state_x_prime,
                 'clock': None, 'date': next_event_date_t_prime})
             counter +=1
 
+    # initializing the string that will be the first line in our output file after the simulation
     def init_steps(self):
         if self.durations is not None:
             for event in self.durations:
@@ -140,8 +159,14 @@ class Simulator:
         else :
             self.steps.append("Clocks are generated randomly" + "\n")
 
+    # function responsible of output steps and details after end of simulation
     def output_simulation_details(self):
+        # open the current program directory and create a file of the name steps.txt with 'w' mode which stand for create a file if
+        # doesn't exist, or overwrite it if it already exist
         file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/steps.txt","w")
+        # write the date (help to know the time of program execution )
         file.write(str(datetime.datetime.now())+"\n")
+        # each element in the steps list represent a step or a line
         for s in self.steps:
+            # write steps line by line
             file.write(s)
