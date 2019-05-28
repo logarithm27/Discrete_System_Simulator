@@ -57,6 +57,7 @@ class InfiniteModel:
         self.calendar = []
         # begin the simulation
         self.simulate()
+        self.time_execution = 0
 
     # function to build the infinite automaton after generating the infinite states in
     # the build_infinite_states function

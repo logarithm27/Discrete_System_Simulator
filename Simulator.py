@@ -149,6 +149,15 @@ class Simulator:
                 {'event': next_event_e_prime, 'next_state': next_state_x_prime,
                 'clock': None, 'date': next_event_date_t_prime})
             counter +=1
+            # sometimes we have two events that may occur at the same time
+            # we don't want that, so we will sacrifice by removing one of them
+            # such that way we will have only one event that is occurring at that time
+        for index,c in enumerate(self.calendar[:-1]):
+            # if the current event date is the same as the next event's date
+            if self.calendar[index]['date'] == self.calendar[index+1]['date']:
+                # remove it
+                self.calendar.pop(c)
+
 
     # initializing the string that will be the first line in our output file after the simulation
     def init_steps(self):
