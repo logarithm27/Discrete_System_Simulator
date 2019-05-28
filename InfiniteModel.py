@@ -116,7 +116,6 @@ class InfiniteModel:
         for state in self.states:
             self.state_probabilities[state] = 0
             self.sigma_probabilities[state] = 0
-        print("Simulating ...")
         # looping until we reach the maximum number of simulation we want to do
         for counter in range(self.number_of_experiences):
             # begin the simulation that help us to generate the timing graph by instantiate a Simulator Object

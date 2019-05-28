@@ -7,6 +7,7 @@ INVALID_NUMBER_EXPERIENCE_ERROR = -100
 class InfiniteModelInput:
     def __init__(self):
         self.contents = asking_for_input_infinite_models()
+        print("Simulating ...")
         self.number_of_states = MAX_N
         is_valid_description = False
         if self.contents:

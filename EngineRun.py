@@ -88,6 +88,7 @@ class Example(Frame):
 def main():
     root = Tk()
     root.geometry("800x500")
+    root.configure(background="red")
     frame = Example(root)
     frame.pack()
     root.mainloop()
