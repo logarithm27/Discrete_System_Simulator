@@ -116,9 +116,13 @@ class InfiniteModel:
             self.state_probabilities[state] = 0
             self.sigma_probabilities[state] = 0
         print("Simulating ...")
+        # looping until we reach the maximum number of simulation we want to do
         for counter in range(self.number_of_experiences):
+            # begin the simulation that help us to generate the timing graph by instantiate a Simulator Object
             simulator = Simulator(self.states[0], None, self.gamma, self.transitions, RANDOM, self.time_interval[1], self.events, self.lambdas)
+            # calling simulate function (the engine of the simulation) from the Simulator class after it was instantiated
             simulator.simulate()
+            # each time we simulate, we get the calendar generated after this simulation
             self.calendar = simulator.calendar
             for index,c in enumerate(self.calendar[:-1]):
                 # if the date that corresponds to the activation of an event is between the given date interval
@@ -169,20 +173,31 @@ class InfiniteModel:
         for single_sigma_debit in self.sigma_debits:
             # dividing the sum of debits of each event by the number of experiences to get a new debit
             self.debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
-        # get current directory path
+        # get current directory path and write a file of the name probability.txt to show the calculated probabilities
         file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/probability.txt","w")
         file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability" + "\n")
+        # initializing this list that represent the x_axis of the chart ( x axis will holds the set of states )
         x_axis_data = []
+        # each state has it's own probability, and this probability will be held by the y axis
         y_axis_data = []
+        # showing the probabilities in two different ways :
+        # first way : display it in a nice graphical chart by generating an html file
+        # second way : write probabilities in an output file
         for state in self.state_probabilities:
+            # add each state to the x axis
             x_axis_data.append(state)
+            # add the corresponding probability of that state to the y axis
             y_axis_data.append(self.state_probabilities[state])
+            # write the probabilities on the probability.txt output file
             file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(state)+") = " +str(self.state_probabilities[state]) + "\n")
+        # generating the file and open it automatically by setting up the auto_open to True
         plotly.offline.plot({
             "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
             "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval))
         }, auto_open=True)
+        # output steps of simulation in a file
         simulator.output_simulation_details()
+
         for transition in self.transitions:
             print(transition)
         for element in self.gamma:
