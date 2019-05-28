@@ -156,7 +156,7 @@ class Simulator:
             # if the current event date is the same as the next event's date
             if self.calendar[index]['date'] == self.calendar[index+1]['date']:
                 # remove it
-                self.calendar.pop(c)
+                self.calendar.pop(index)
 
 
     # initializing the string that will be the first line in our output file after the simulation
