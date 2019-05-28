@@ -152,11 +152,6 @@ class Simulator:
             # sometimes we have two events that may occur at the same time
             # we don't want that, so we will sacrifice by removing one of them
             # such that way we will have only one event that is occurring at that time
-        for index,c in enumerate(self.calendar[:-1]):
-            # if the current event date is the same as the next event's date
-            if self.calendar[index]['date'] == self.calendar[index+1]['date']:
-                # remove it
-                self.calendar.pop(index)
 
 
     # initializing the string that will be the first line in our output file after the simulation

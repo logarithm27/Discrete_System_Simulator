@@ -48,7 +48,7 @@ class Model:
         self.calendar.append(
             {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
              'clock': 0.0, 'date': self.initial_event_date_t_previous})
-        while still_more_clocks(self.durations):
+        while still_more_clocks(self.durations,NON_RANDOM,None,None):
             current_state = self.calendar[-1]['next_state']
             active_events = self.gamma[current_state]
             get_y_star_and_arg = None
