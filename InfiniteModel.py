@@ -194,7 +194,7 @@ class InfiniteModel:
         # generating the file and open it automatically by setting up the auto_open to True
         plotly.offline.plot({
             "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
-            "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval))
+            "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval) + " under " + str(self.number_of_experiences)+" simulation")
         }, auto_open=True)
         # output steps of simulation in a file
         simulator.output_simulation_details()
