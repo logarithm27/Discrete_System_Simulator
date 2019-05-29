@@ -41,21 +41,21 @@ class InfiniteModelInput:
         # X for set of states, and V's (sets of clocks) consistent with the corresponding given E
         # and n for the number of states in the model
         skeleton_of_model = []
-        how_many_durations = 0
+        how_many_lambdas = 0
         for single_content in self.contents:
             if single_content[0] == "/" and single_content[1]=="/":
                 pass
             # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
             data = ""
-            data += str(single_content[0])
+            skeleton_of_model.append(str(single_content[0]))
         if not self.invalid_description_error_message():
             return False
         if "L" in skeleton_of_model or "l" in skeleton_of_model:
             for element_of_model in skeleton_of_model:
                 if element_of_model.casefold().__eq__("L".casefold()):
-                    how_many_durations += 1
+                    how_many_lambdas += 1
             if "E" in skeleton_of_model or "e" in skeleton_of_model:
-                if len(self.extracting_data_from_description_file("E")) != how_many_durations:
+                if len(self.extracting_data_from_description_file("E")) != how_many_lambdas:
                     print("Invalid description, you should put the set of clocks that are consistent with the set of events")
                     return False
         return True
@@ -171,11 +171,11 @@ class InfiniteModelInput:
                     print("can't handle lambda("+ event +"), the following event {"+event+"} doesn't exist, fix it and try again")
                     return None
                 elif check_consistent_events(event,self.extracting_data_from_description_file("E")):
-                    clocks = split_string[4::].replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","").replace("{","").replace("}","").replace("[","").replace("]","")
+                    clocks = get_value_from_lambdas(split_string).replace(";",",").replace("-",",").replace("~",",").replace(" ",'').replace("\n","").replace("{","").replace("}","").replace("[","").replace("]","")
                     clocks = pass_commentaries(clocks).split(",")
                     try:
-                        durations[split_string[2]] = list(map(float,clocks))
-                    except None or SyntaxError or ValueError:
+                        durations[event] = list(map(float,clocks))
+                    except ValueError or TypeError or Exception:
                         print("Invalid rate, try again")
                         return None
         return durations

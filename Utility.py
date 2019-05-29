@@ -211,6 +211,14 @@ def get_event_from_lambdas(line_string):
                 event+=c2
     return event
 
+def get_value_from_lambdas(line_string):
+    event =""
+    for i, c1 in enumerate(list(line_string)):
+        if c1==")":
+            for j,c2 in enumerate(list(line_string)[i+1::]):
+                event+=c2
+    return event
+
 def check_consistent_events(event, list_of_events):
     for single_event in list_of_events:
         if single_event == event:
