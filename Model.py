@@ -27,12 +27,15 @@ class Model:
         for c in self.calendar:
             print(c)
 
+    # method useful only when we want to simulate using the calculation of y*
+    # this function is called from simulate method
     def get_min_y_star_and_arg_event(self, active_events):
         ordered_events_by_clock_value = {}
         for event in active_events:
             if self.durations[event]:
                 v = self.durations[event].pop(0)
-                ordered_events_by_clock_value[event] = v # get the first value in the set of clocks for each event
+                # get the first value in the set of clocks for each event
+                ordered_events_by_clock_value[event] = v
                 self.last_clock_pop[event] = v
         return sorted(ordered_events_by_clock_value.items(), key=lambda event__y_star: (event__y_star[1], event__y_star[0]))  #sort by y*
 
