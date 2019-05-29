@@ -28,7 +28,7 @@ class Model:
             print(c)
 
     # method useful only when we want to simulate using the calculation of y*
-    # this function is called from simulate method
+    # this method is called from simulate method
     def get_min_y_star_and_arg_event(self, active_events):
         ordered_events_by_clock_value = {}
         for event in active_events:
