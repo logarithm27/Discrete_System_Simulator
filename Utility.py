@@ -78,7 +78,7 @@ def asking_for_input_infinite_models():
         with open(ask_for_file) as file:
             contents = file.readlines()
             # you may also want to remove whitespace characters like `\n` at the end of each line
-        contents = [line.strip() for line in contents]
+        contents = [line for line in contents if line]
         for single_content in contents:
             if len(single_content.strip()) == 0: # skip the empty lines
                 contents.remove(single_content)
@@ -200,3 +200,19 @@ def replace(string, characters):
     while characters:
         string = string.replace(characters.pop(0),"")
     return pass_commentaries(string)
+
+def get_event_from_lambdas(line_string):
+    event =""
+    for i, c1 in enumerate(list(line_string)):
+        if c1=="(":
+            for j,c2 in enumerate(list(line_string)[i+1::]):
+                if c2 == ")":
+                    break
+                event+=c2
+    return event
+
+def check_consistent_events(event, list_of_events):
+    for single_event in list_of_events:
+        if single_event == event:
+            return True
+    return False
