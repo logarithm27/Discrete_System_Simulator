@@ -174,8 +174,8 @@ class InfiniteModel:
             # dividing the sum of debits of each event by the number of experiences to get a new debit
             self.debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
         # get current directory path and write a file of the name probability.txt to show the calculated probabilities
-        file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/probability.txt","w")
-        file.write(str(datetime.datetime.now())+"\n"+"P[ T1 < t < T2] (State X) = Probability" + "\n")
+        file_output = open(str(os.path.dirname(os.path.realpath(__file__))) + "/probability.txt", "w")
+        file_output.write(str(datetime.datetime.now()) + "\n" + "P[ T1 < t < T2] (State X) = Probability" + "\n")
         # initializing this list that represent the x_axis of the chart ( x axis will holds the set of states )
         x_axis_data = []
         # each state has it's own probability, and this probability will be held by the y axis
@@ -189,7 +189,7 @@ class InfiniteModel:
             # add the corresponding probability of that state to the y axis
             y_axis_data.append(self.state_probabilities[state])
             # write the probabilities on the probability.txt output file
-            file.write("P["+str(self.time_interval[0])+" < t < "+str(self.time_interval[1])+"] ("+str(state)+") = " +str(self.state_probabilities[state]) + "\n")
+            file_output.write("P[" + str(self.time_interval[0]) + " < t < " + str(self.time_interval[1]) + "] (" + str(state) + ") = " + str(self.state_probabilities[state]) + "\n")
         # generating the file and open it automatically by setting up the auto_open to True
         plotly.offline.plot({
             "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
