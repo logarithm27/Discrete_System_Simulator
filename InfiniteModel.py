@@ -102,7 +102,7 @@ class InfiniteModel:
                     # if the new generated state is not already added on the list of states
                     # and the state is not violating the rules ( min_bounds <= new state <= max_bounds )
                     # then we add this state to the list of states
-                    # i.e : [ (0,0) < (1,5) < (1,8) ] (1,5) is a valid state; [(0,0) # (-1,18) # (1,8)] (-1,18) is not a valid state
+                    # i.e : [ (0,0) < (1,5) < (1,8) ] (1,5) is a valid state; [(0,0) <||> (-1,18) <||> (1,8)] (-1,18) is not a valid state
                     if new_state not in self.states and check_valid_state(self.min_bounds,self.max_bounds,new_state):
                         self.states.append(new_state)
             max_n += 1
