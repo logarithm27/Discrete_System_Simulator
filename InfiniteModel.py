@@ -95,7 +95,7 @@ class InfiniteModel:
             states = sorted(list(dict.fromkeys(self.states)))
             # looping through the states
             for state in states:
-                # for each state looping through an event description
+                # for each state looping through events' descriptions
                 for event in self.events_description:
                     # generate a new state by making the sum of state and the description
                     new_state = tuple_sum(self.events_description[event], state)
