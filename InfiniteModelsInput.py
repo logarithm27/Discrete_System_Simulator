@@ -46,7 +46,6 @@ class InfiniteModelInput:
             if single_content[0] == "/" and single_content[1]=="/":
                 pass
             # data may represents the character 'E' or 'X' or 'n' or 'V(a)' ...
-            data = ""
             skeleton_of_model.append(str(single_content[0]))
         if not self.invalid_description_error_message():
             return False
@@ -119,7 +118,7 @@ class InfiniteModelInput:
                 return data
             return None
         except TypeError or None or SyntaxError or Exception:
-            print("Something went wrong, check your file description, fix your eventual typo error and try again")
+            print("Something went wrong, check your file description, fix any eventual typo error and try again")
             return None
 
     def max_n_number_checker(self):
