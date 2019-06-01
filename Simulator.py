@@ -121,7 +121,7 @@ class Simulator:
             ordered_events_by_date = sort_by_date(ordered_events_by_date)
             self.steps.append("ordered list " +str(ordered_events_by_date) + '\n')
             # the event that will be added to the calendar is the first element of the ordered list ( the event who have the smallest date value )
-            next_event_e_prime = next(iter(ordered_events_by_date))
+            next_event_e_prime = list(ordered_events_by_date.keys())[0]
             self.steps.append("the {"+str(next_event_e_prime)+"}"+" event is the trigger event, it well be removed from the ordered list\n")
             # get the corresponding date of the trigger event (next_event_e_prime) and round it to 1 digit after the comma ( floating number )
             next_event_date_t_prime = round(ordered_events_by_date[next_event_e_prime],1)

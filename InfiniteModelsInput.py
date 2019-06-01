@@ -139,7 +139,8 @@ class InfiniteModelInput:
                 bound = split_string.split(",")
                 for index, coordinate in enumerate(bound):
                     if coordinate == "N":
-                        max_num = self.max_n_number_checker() # check if the user have put N in description file
+                        # check if the user have put N in description file
+                        max_num = self.max_n_number_checker()
                         if max_num not in INVALID_MAX_N_ERROR:
                             bound[index] = str(max_num)
                         else:

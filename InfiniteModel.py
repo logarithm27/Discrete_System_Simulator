@@ -109,6 +109,8 @@ class InfiniteModel:
 
     # begin the simulation
     def simulate(self):
+        for transition in self.transitions:
+            print(transition)
         # initializing variables that will be used to calculate event's debits and states's probabilities
         for event in self.events:
             self.debits[event] = 0
