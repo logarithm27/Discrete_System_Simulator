@@ -1,7 +1,8 @@
 # Utility class offers a number of functions
 # each function has it's own task and runs a particular algorithm useful in another class
 
-import numpy as np
+import random
+import math
 MAX_DIMENSION = 3
 TYPO_ERROR = 27
 NON_RANDOM = 0
@@ -182,7 +183,7 @@ def random_durations_generator(events, lambdas):
     for event in events:
         durations[event] = []
     for event in events:
-        v = -(1/lambdas[event][0])* np.log(1-np.random.uniform(0,1))
+        v = -(1/lambdas[event][0])* math.log(1-random.uniform(0,1))
         durations[event].append(round(v,1))
     return durations
 
