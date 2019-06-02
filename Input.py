@@ -16,6 +16,7 @@ class Input:
         self.random = False
         self.check_durations_input_option()
         self.lambdas= {}
+        self.number_of_simulation = 0
         self.time_interval = []
         self.durations_input(self.random)
 
@@ -58,6 +59,15 @@ class Input:
                     self.durations_input(random)
             self.set_of_durations = random_durations_generator(self.events,self.lambdas)
             self.time_interval_input()
+            try:
+                self.number_of_simulation = int (input("Enter number of simulation you want to do : "))
+                while self.number_of_simulation < 0 or self.number_of_simulation == 0:
+                    print("Invalid number, try again")
+                    self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
+            except None or SyntaxError or ValueError or TypeError:
+                print("Invalid number, try again")
+                self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
+
 
     def method_input(self):
         simple_way_or_other_way = input("Simulate by using calculation (enter y ) or without (enter n): ")
