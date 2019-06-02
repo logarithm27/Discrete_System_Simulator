@@ -229,7 +229,7 @@ def check_consistent_events(event, list_of_events):
 
 
 def analysis(simulator_calendar, time_interval, debits, sigma_debits, sigma_probabilities, state_probabilities):
-    # each time we simulate, we get the calendar generated after this simulation
+    # each time we simulate, we get the calendar generated after the simulation
             calendar = simulator_calendar
             for index,c in enumerate(calendar[:-1]):
                 # if the date that corresponds to the activation of an event is between the given date interval
@@ -274,9 +274,8 @@ def analysis(simulator_calendar, time_interval, debits, sigma_debits, sigma_prob
                 sigma_debits[event] += debits[event]
             return debits, sigma_debits,sigma_probabilities, state_probabilities
 
-
+# by the end of all simulations
 def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabilities, time_interval, number_of_experiences):
-    # by the end of all simulations
     for state in sigma_probabilities:
         # we calculate the final probability of each state by dividing the sigma by the number of simulations
         state_probabilities[state] = round((sigma_probabilities[state] / number_of_experiences), 4)
