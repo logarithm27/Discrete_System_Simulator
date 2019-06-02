@@ -3,8 +3,6 @@ from Simulator import *
 from InfiniteModelsInput import *
 from Utility import *
 import datetime
-import plotly
-import plotly.graph_objs as go
 
 # noinspection PyUnboundLocalVariable
 # the Infinite Model class allow us to build the infinite model and make simulation and create the timing graph
@@ -193,10 +191,10 @@ class InfiniteModel:
             # write the probabilities on the probability.txt output file
             file_output.write("P[" + str(self.time_interval[0]) + " < t < " + str(self.time_interval[1]) + "] (" + str(state) + ") = " + str(self.state_probabilities[state]) + "\n")
         # generating the file and open it automatically by setting up the auto_open to True
-        plotly.offline.plot({
-            "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
-            "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval) + " under " + str(self.number_of_experiences)+" simulation")
-        }, auto_open=True)
+        # plotly.offline.plot({
+        #     "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
+        #     "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval) + " under " + str(self.number_of_experiences)+" simulation")
+        # }, auto_open=True)
         # output steps of simulation in a file
         simulator.output_simulation_details()
 

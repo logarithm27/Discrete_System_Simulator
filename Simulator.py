@@ -63,7 +63,7 @@ class Simulator:
         # this is the initial date where the simulation is starting from
         initial_event_date_t_previous = 0.0
         # initialize the calendar with initial values
-        self.calendar.append({'event': None, 'next_state': self.initial_state,
+        self.calendar.append({'event': "Beginning", 'next_state': self.initial_state,
                  'clock': None, 'date': initial_event_date_t_previous})
         # still more clocks has two features depending on the type of generating the clocks ( random or not )
         # if we generate clocks randomly, then we should have the last date reached in the simulation by having ( self.calendar[-1]['date'] )

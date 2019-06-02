@@ -16,6 +16,8 @@
       <option name="ignoredIdentifiers">
         <list>
           <option value="str.casefold" />
+          <option value="model_2.x" />
+          <option value="model_2.*" />
         </list>
       </option>
     </inspection_tool>

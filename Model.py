@@ -50,7 +50,7 @@ class Model:
     # updating the clock value each time and searching for y* and the arg of y*
     def simulate(self):
         self.calendar.append(
-            {'event': None, 'next_state': self.user_input.state_machine['initial_state'],
+            {'event': "Beginning", 'next_state': self.user_input.state_machine['initial_state'],
              'clock': 0.0, 'date': self.initial_event_date_t_previous})
         for event in self.events:
             self._y_s[event] = 0
