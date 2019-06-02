@@ -91,7 +91,7 @@ class Input:
             self.time_interval = list(map(int,input("Enter a time interval i.e : 100,200").split(',')))
             while len(self.time_interval) != 2 :
                 print("You must enter only two positive integer values, try again")
-                self.time_interval = list(map(int, input("Enter a time interval i.e : 100,200")))
+                self.time_interval = list(map(int, input("Enter a time interval (i.e : 100,200) : ")))
         except None or SyntaxError or ValueError or TypeError:
             print("Invalid input")
             self.time_interval_input()

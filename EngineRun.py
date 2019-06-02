@@ -1,96 +1,150 @@
-from tkinter import *
-import tkinter as tk
+from InfiniteModel import *
+from Model import *
+from javascript_generator import *
+import datetime
 
-from InfiniteModel import InfiniteModel
-from Model import Model
-
-
-class Example(Frame):
-
-    def __init__(self, parent, *args, **kw):
-        Frame.__init__(self, parent, *args, **kw)
-
-        self.initUI()
+INFINITE = 0
+FINITE = 1
 
 
-    def initUI(self):
-        self.master.title("Calender")
-        self.pack(fill=BOTH, expand=1)
+class Engine:
 
-
+    def __init__(self):
         print("1- Simulate finite automaton")
         print("2- Simulate Infinite automaton")
         choice_automaton = input("option 1 or 2 : ")
         calendar = []
-        choice = ""
+        choice = None
+        date_simulation = datetime.datetime.now()
+        plot_title = str(date_simulation.strftime('Timing graph simulation of %d, %b %Y, %X'))
         if int(choice_automaton) == 2:
             model = InfiniteModel()
             calendar = model.calendar
-            choice = "infinite"
+            choice = INFINITE
         elif int(choice_automaton) == 1:
             model = Model()
             calendar = model.calendar
-            choice = "finite"
+            choice = FINITE
 
-        scrollbar=Scrollbar(self,orient= HORIZONTAL)
-        scrollbar.pack(side=BOTTOM,fill= X)
-        canvas = Canvas(self, bd=0, highlightthickness=0, xscrollcommand=scrollbar.set)
-        steps = {}
-        steper = 15.5
-        max_x = 970
-        if len(calendar) > 10:
-            max_x = 807000
-            canvas.create_line(20, 200, max_x, 200)
-            steper = 45
-        else:
-            canvas.create_line(20, 200, max_x, 200)
-        i = 15
-        step = -0.1
-        while i <= max_x:
-            step +=0.1
-            canvas.create_line(i,205,i,195)
-            if round(step,1) == 0.0 or round(step,1) == 0.5:
-                canvas.create_line(i,205,i,195)
-            steps[round(step,1)] = [i,205,195]
-            canvas.create_text(i,215, text= str(round(step,1)), font='Helvetica 6 ')
-            i += steper
+        calendar_without_collisions = []
+        for index, c in enumerate(calendar[:-1]):
+            if calendar[index]['date'] == calendar[index + 1]['date']:
+                pass
+            calendar_without_collisions.append(calendar[index])
 
-        for i,c in enumerate(calendar):
-                current_event_date = calendar[i]['date']
-                if i+1 < len(calendar):
-                    next_event_date = calendar[i+1]['date']
-                    state_x_position = int((steps[current_event_date][0] + steps[next_event_date][0])/2)
-                else:
-                    state_x_position = (steps[current_event_date][0] + 35)
-                state_y_position = 185
-                canvas.create_text(state_x_position, state_y_position, text = str(c['next_state']), font='Helvetica 10 bold')
-                if c['event'] is not None :
-                    canvas.create_line(steps[current_event_date][0],190,steps[current_event_date][0],160, arrow = tk.FIRST)
-                    canvas.create_text(steps[current_event_date][0],150, text= str(c['event']), font='Helvetica 10 bold')
-                    canvas.create_text(steps[current_event_date][0],225, text = str(current_event_date), font ='Helvetica 8 bold')
-                    canvas.create_line(steps[current_event_date][0],205,steps[current_event_date][0],195)
-        y = 360
-        if choice == "infinite":
-            for event in model.debits:
-                canvas.create_text(50,y, text = "N" + "(" +str(event)+ ") = "+str(model.debits[event]),
-                                   font = 'Helvetica 10 bold' )
-                y += 18
+        calendar_without_collisions.append(calendar[-1])
 
-        canvas.pack(fill=BOTH, expand=1)
-        scrollbar.config(command=canvas.xview)
-        canvas.xview_moveto(0)
-        canvas.yview_moveto(0)
-        frame = Frame(canvas)
-        canvas.create_window((500,500),window=frame,anchor= CENTER)
-        canvas.config(scrollregion=canvas.bbox("all"))
+        calendar = calendar_without_collisions
+        print('without collisions')
+        for c in calendar:
+            print(c)
 
+        states = []
+        x_axes_states = []
+        y_axes_states = []
+        x_axes_date_event_triggering = []
+        x_axes_dates = []
+        annotations = []
+        for element in calendar:
+            states.append(element['next_state'])
+            x_axes_date_event_triggering.append({element['event']: element['date']})
+            x_axes_dates.append(element['date'])
+            y_axes_states.append(0)
+
+        for index, element in enumerate(calendar[:-1]):
+            if calendar[index]['date'] == 0:
+                pass
+            x_position = (calendar[index]['date'] + calendar[index + 1]['date']) / 2
+            if round(calendar[index + 1]['date'] - calendar[index + 1]['date'], 1) == 0.1:
+                x_axes_states.append(round(x_position, 1))
+            else:
+                x_axes_states.append(round(x_position, 2))
+            y_axes_states.append(0)
+
+        x_axes_states.append(round(calendar[-1]['date'] + 0.5, 1))  # the last state
+
+        string_states = []
+        for state in states:
+            string_states.append("'state = " + str(state) + "'")
+
+        states_positions = {
+            'x': x_axes_states,
+            'y': y_axes_states,
+            'hoverinfo': "|x|",
+            'mode': '|text|',
+            'name': '|state|',
+            'text': string_states,
+            'textposition': '|top|',
+            'textfont': {
+                'family': '|Candara Bold Italic|',
+                'size': 20,
+                'color': '|#000000|'
+            },
+            'type': '|scatter|'
+        }
+        events_positions = {
+            'x': x_axes_dates,
+            'y': y_axes_states,
+            'hoverinfo': "|x|",
+            'type': '|scatter|'
+        }
+        HTML.append("var states_positions = \n")
+        states_positions = str(states_positions).replace("'", "")
+        states_positions = states_positions.replace("|", "'")
+        HTML.append(states_positions)
+        HTML.append(";\n")
+
+        HTML.append("var events_positions = \n")
+        events_positions = str(events_positions).replace("'", "")
+        events_positions = events_positions.replace("|", "'")
+        HTML.append(events_positions)
+        HTML.append(";\n")
+
+        for element in x_axes_date_event_triggering:
+            event = list(element.keys())[0]
+            annotations.append(
+                {
+                    'x': element[event],
+                    'y': 1,
+                    'xref': "|x|",
+                    'yref': "|y|",
+                    'text': "|event = " + str(event) + "|",
+                    'arrowhead': 3,
+                    'arrowcolor': '|#636363|',
+                    'ax': 0,
+                    'ay': -255,
+                    'bordercolor': "|#c7c7c7|",
+                    'borderwidth': 2,
+                    'bgcolor': "|#f4c9ba|",
+                    'textfont': {
+                        'family': "|Calibri Italic|",
+                        'size': 18,
+                        'color': "|#1f77b4|"},
+                }
+            )
+        first_date = str(calendar[1]['date'])
+        second_date = str(calendar[2]['date'])
+        file = None
+        if choice == INFINITE:
+            file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/calendar.html", "w")
+        if choice == FINITE:
+            file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/timing_graph.html", "w")
+        HTML.append("var data = [states_positions,events_positions];\nvar layout = { title:{text:'" + str(
+            plot_title) + "',font:{family:'Candara Bold Italic', size:28}, xref: 'paper', x: 0.05,},hovermode: 'x', xaxis: { autorange:false, range: [" + first_date + "," + second_date + "]},yaxis: { autorange: true, showgrid: false, zeroline: false, showline: false, autotick: true, ticks: '', showticklabels: false}, showlegend: false,\n")
+        HTML[-1] = HTML[-1] + "annotations:["
+        for c in annotations:
+            c = str(c).replace("\'", "")
+            c = c.replace("|", "'")
+            HTML[-1] = HTML[-1] + c + ",\n"
+        HTML[-1] = HTML[
+                       -1] + "]};\nPlotly.newPlot('myDiv', data, layout,{displaylogo: false}, {showSendToCloud:true});\n</script>\n</body>"
+
+        for line in HTML:
+            file.write(line)
+        file.close()
 
 def main():
-    root = Tk()
-    root.geometry("800x500")
-    frame = Example(root)
-    frame.pack()
-    root.mainloop()
+    engine = Engine()
 
 if __name__ == '__main__':
 
