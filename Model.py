@@ -19,6 +19,10 @@ class Model:
         self.states = self.user_input.states
         self.transitions = self.user_input.state_machine
         self.calendar = []
+        self.debits = {}
+        self.sigma_debits = {}
+        self.state_probabilities = {}
+        self.sigma_probabilities = {}
         self.last_clock_pop = {}
         self._y_s = {}
         self.time_interval = self.user_input.time_interval
