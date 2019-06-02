@@ -13,7 +13,11 @@ class Input:
         self.state_machine = self.build_state_machine()
         self.gamma = set_of_possible_events_of_all_states(self.states,self.state_machine['transitions'])
         self.set_of_durations = {}  # may be random
-        self.durations_input(False)
+        self.random = False
+        self.check_durations_input_option()
+        self.lambdas= {}
+        self.time_interval = []
+        self.durations_input(self.random)
 
     def build_state_machine(self):
         transitions = []
@@ -42,6 +46,18 @@ class Input:
                     self.set_of_durations[event] = list(map(float, input("Put the set of durations of the [" + event + "] event : ").split(',')))
                 except None or SyntaxError or ValueError:
                     self.durations_input(random)
+        if random:
+            for event in self.events:
+                self.lambdas[event] = []
+            print("Enter the parameter Lambda for each event:")
+            for event in self.events:
+                try:
+                    self.lambdas[event].append(float (input("Lambda("+str(event)+") : ")))
+                except None or SyntaxError or ValueError or TypeError:
+                    print("Invalid input, Try again")
+                    self.durations_input(random)
+            self.set_of_durations = random_durations_generator(self.events,self.lambdas)
+            self.time_interval_input()
 
     def method_input(self):
         simple_way_or_other_way = input("Simulate by using calculation (enter y ) or without (enter n): ")
@@ -50,6 +66,22 @@ class Input:
         else:
             return "simple"
 
+    def check_durations_input_option(self):
+        random_or_not = input("Do you want to generate clocks automatically ( Y/N ) ? : ")
+        if random_or_not == "N".casefold():
+            self.random = False
+        else:
+            self.random = True
+
+    def time_interval_input(self):
+        try:
+            self.time_interval = list(map(int,input("Enter a time interval i.e : 100,200").split(',')))
+            while len(self.time_interval) != 2 :
+                print("You must enter only two positive integer values, try again")
+                self.time_interval = list(map(int, input("Enter a time interval i.e : 100,200")))
+        except None or SyntaxError or ValueError or TypeError:
+            print("Invalid input")
+            self.time_interval_input()
 
     def print_data(self):
         print(self.states)

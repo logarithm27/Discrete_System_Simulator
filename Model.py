@@ -7,6 +7,7 @@ class Model:
     def __init__(self):
         self.steps = []
         self.user_input = Input()
+        self.lambdas = self.user_input.lambdas
         self.gamma = self.user_input.gamma
         self.next_state_x_prime = None
         self.next_event_e_prime = None
@@ -20,6 +21,7 @@ class Model:
         self.calendar = []
         self.last_clock_pop = {}
         self._y_s = {}
+        self.time_interval = self.user_input.time_interval
         which_method = self.user_input.method_input()
         if which_method == "simple":
             self.simulate_simple_way()
@@ -42,7 +44,11 @@ class Model:
 
     # without updating the clock value each time
     def simulate_simple_way(self):
-        simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], NON_RANDOM, None, None, None)
+        simulator = None
+        if len(self.lambdas) > 0:
+            simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], RANDOM,self.time_interval[1],self.events,self.lambdas)
+        else:
+            simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], NON_RANDOM, None, None, None)
         simulator.simulate()
         simulator.output_simulation_details()
         self.calendar = simulator.calendar
@@ -84,5 +90,6 @@ class Model:
                                   'date': self.next_event_date_t_prime})
 
 
-
+if __name__ == '__main__':
+    model = Model()
 
