@@ -23,6 +23,12 @@ class Model:
         self.sigma_debits = {}
         self.state_probabilities = {}
         self.sigma_probabilities = {}
+        for event in self.events:
+            self.debits[event] = 0
+            self.sigma_debits[event] = 0
+        for state in self.states:
+            self.state_probabilities[state] = 0
+            self.sigma_probabilities[state] = 0
         self.last_clock_pop = {}
         self.number_of_experiences = self.user_input.number_of_simulation
         self._y_s = {}
@@ -34,6 +40,7 @@ class Model:
             self.simulate()
         for c in self.calendar:
             print(c)
+        print(self.debits)
 
     # method useful only when we want to simulate using the calculation of y*
     # this method is called from simulate method
@@ -51,12 +58,6 @@ class Model:
     def simulate_simple_way(self):
         simulator = None
         if len(self.lambdas) > 0:
-            for event in self.events:
-                self.debits[event] = 0
-                self.sigma_debits[event] = 0
-            for state in self.states:
-                self.state_probabilities[state] = 0
-                self.sigma_probabilities[state] = 0
             for counter in range(self.number_of_experiences):
                 simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], RANDOM,self.time_interval[1],self.events,self.lambdas)
                 simulator.simulate()
@@ -77,11 +78,24 @@ class Model:
             self.sigma_probabilities = analysis_output_values[2]
             self.state_probabilities = analysis_output_values[3]
             simulator.output_simulation_details()
-            print(self.debits)
         else:
             simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], NON_RANDOM, None, None, None)
             simulator.simulate()
             self.calendar = simulator.calendar
+            analyse = analysis(self.calendar, [self.calendar[0]['date'], self.calendar[-1]['date']], self.debits, self.sigma_debits,
+                               self.sigma_probabilities, self.state_probabilities)
+            self.debits = analyse[0]
+            self.sigma_debits = analyse[1]
+            self.sigma_probabilities = analyse[2]
+            self.state_probabilities = analyse[3]
+            # by the end of all simulations
+            analysis_output_values = analysis_output(self.debits, self.sigma_debits, self.sigma_probabilities,
+                                                 self.state_probabilities, [self.calendar[0]['date'], self.calendar[-1]['date']],
+                                                 self.number_of_experiences)
+            self.debits = analysis_output_values[0]
+            self.sigma_debits = analysis_output_values[1]
+            self.sigma_probabilities = analysis_output_values[2]
+            self.state_probabilities = analysis_output_values[3]
             simulator.output_simulation_details()
 
     # updating the clock value each time and searching for y* and the arg of y*

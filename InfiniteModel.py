@@ -2,7 +2,7 @@ import timeit
 from Simulator import *
 from InfiniteModelsInput import *
 from Utility import *
-import datetime
+
 
 # noinspection PyUnboundLocalVariable
 # the Infinite Model class allow us to build the infinite model and make simulation and create the timing graph

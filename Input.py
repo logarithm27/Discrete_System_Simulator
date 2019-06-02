@@ -16,7 +16,7 @@ class Input:
         self.random = False
         self.check_durations_input_option()
         self.lambdas= {}
-        self.number_of_simulation = 0
+        self.number_of_simulation = 1
         self.time_interval = []
         self.durations_input(self.random)
 
@@ -70,9 +70,12 @@ class Input:
 
 
     def method_input(self):
-        simple_way_or_other_way = input("Simulate by using calculation (enter y ) or without (enter n): ")
-        if simple_way_or_other_way == "y".lower():
-            return "hard"
+        if len(self.lambdas) == 0:
+            simple_way_or_other_way = input("Simulate by using calculation (enter y ) or without (enter n): ")
+            if simple_way_or_other_way == "y".lower():
+                return "hard"
+            else:
+                return "simple"
         else:
             return "simple"
 
