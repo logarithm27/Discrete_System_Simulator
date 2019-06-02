@@ -1,6 +1,7 @@
 # Utility class offers a number of functions
 # each function has it's own task and runs a particular algorithm useful in another class
-
+import datetime
+import os
 import random
 import math
 MAX_DIMENSION = 3
@@ -225,3 +226,81 @@ def check_consistent_events(event, list_of_events):
         if single_event == event:
             return True
     return False
+
+
+def analysis(simulator_calendar, time_interval, debits, sigma_debits, sigma_probabilities, state_probabilities):
+    # each time we simulate, we get the calendar generated after this simulation
+            calendar = simulator_calendar
+            for index,c in enumerate(calendar[:-1]):
+                # if the date that corresponds to the activation of an event is between the given date interval
+                if time_interval[0] < c['date'] < time_interval[1]:
+                    # increment the occurrence counter
+                    debits[c['event']] += 1
+                # -------calculating probabilities of each state being active in the given interval--------
+                # initialize the variable that will be used to calculate the time interval where each state is active
+                interval_state_active = 0
+                # if the state is active between an interval ot time that began with a value less than the minimum value
+                # or the minimum bound given in the interval ot time and a value less than or equal to the maximum bound or value in the time interval
+                if calendar[index]['date'] <= time_interval[0] < calendar[index + 1]['date'] <= time_interval[1]:
+                    # the state is active between [ the minimum value given in the time interval - the date when the state is no longer active ]
+                    interval_state_active = calendar[index + 1]['date'] - time_interval[0]
+                # if the state is active between the given time interval
+                if time_interval[0]<= calendar[index]['date'] < calendar[index +1]['date'] <= time_interval[1]:
+                    interval_state_active = calendar[index + 1]['date'] - calendar[index]['date']
+                # if the state is active between a date greater than the minimum bound or value and a value that's greater
+                # than the maximum bound of the given time interval
+                if time_interval[0] <= calendar[index]['date'] <= time_interval[1] < calendar[index + 1]['date']:
+                    # state is active on [ the start date when the state is being active - maximum bound ]
+                    interval_state_active = time_interval[1] - calendar[index]['date']
+                # each state has it's own probability, each time we face that state, with add the corresponding interval time of being active
+                # we add that date as long as we're going until the end of the simulation
+                # this is not the real probability for now, it will be calculated later, for now we're using the same variable for adding the dates
+                state_probabilities[c['next_state']] += interval_state_active
+            # after collecting data and counting the probabilities of state activity status
+            for state in state_probabilities:
+                # we now calculate the probabilities, by dividing each value calculated previously ( sum intervals where each state was active ) by the
+                # subtracting the max bound by the min bound
+                state_probabilities[state] = state_probabilities[state]/(time_interval[1] - time_interval[0])
+                # for statistical use, as long as we go through the number of simulation, we add the calculated probability
+                # i.e : we have 100 simulation, the sigma ( sum of probabilities ) will be the sum of probabilities 100 times
+                # note that each state has it's own probability
+                sigma_probabilities[state] += state_probabilities[state]
+            # still inside the simulation, iterating through calculated occurrence of each event
+            for event in debits:
+                # calculate the debit by dividing number of occurrence of each event by T2 - T1
+                debits[event] = debits[event] / (time_interval[1] - time_interval[0])
+                # while we're inside the main loop ( number of experiences, simulations ) we add the calculated debit
+                # that corresponds to a particular event to the new one ( we build a sum of debits for each event)
+                sigma_debits[event] += debits[event]
+            return debits, sigma_debits,sigma_probabilities, state_probabilities
+
+
+def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabilities, time_interval, number_of_experiences):
+    # by the end of all simulations
+    for state in sigma_probabilities:
+        # we calculate the final probability of each state by dividing the sigma by the number of simulations
+        state_probabilities[state] = round((sigma_probabilities[state] / number_of_experiences), 4)
+    # by the end the simulations
+    for single_sigma_debit in sigma_debits:
+        # dividing the sum of debits of each event by the number of experiences to get a new debit
+        debits[single_sigma_debit] = round(sigma_debits[single_sigma_debit] / number_of_experiences, 3)
+    # get current directory path and write a file of the name probability.txt to show the calculated probabilities
+    file_output = open(str(os.path.dirname(os.path.realpath(__file__))) + "/probability.txt", "w")
+    file_output.write(str(datetime.datetime.now()) + "\n" + "P[ T1 < t < T2] (State X) = Probability" + "\n")
+    # initializing this list that represent the x_axis of the chart ( x axis will holds the set of states )
+    x_axis_data = []
+    # each state has it's own probability, and this probability will be held by the y axis
+    y_axis_data = []
+    # showing the probabilities in two different ways :
+    # first way : display it in a nice graphical chart by generating an html file
+    # second way : write probabilities in an output file
+    for state in state_probabilities:
+        # add each state to the x axis
+        x_axis_data.append(state)
+        # add the corresponding probability of that state to the y axis
+        y_axis_data.append(state_probabilities[state])
+        # write the probabilities on the probability.txt output file
+        file_output.write(
+            "P[" + str(time_interval[0]) + " < t < " + str(time_interval[1]) + "] (" + str(state) + ") = " + str(
+                state_probabilities[state]) + "\n")
+    return debits, sigma_debits, sigma_probabilities, state_probabilities

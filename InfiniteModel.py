@@ -124,78 +124,18 @@ class InfiniteModel:
             simulator.simulate()
             # each time we simulate, we get the calendar generated after this simulation
             self.calendar = simulator.calendar
-            for index,c in enumerate(self.calendar[:-1]):
-                # if the date that corresponds to the activation of an event is between the given date interval
-                if self.time_interval[0] < c['date'] < self.time_interval[1]:
-                    # increment the occurrence counter
-                    self.debits[c['event']] += 1
-                # -------calculating probabilities of each state being active in the given interval--------
-                # initialize the variable that will be used to calculate the time interval where each state is active
-                interval_state_active = 0
-                # if the state is active between an interval ot time that began with a value less than the minimum value
-                # or the minimum bound given in the interval ot time and a value less than or equal to the maximum bound or value in the time interval
-                if self.calendar[index]['date'] <= self.time_interval[0] < self.calendar[index + 1]['date'] <= self.time_interval[1]:
-                    # the state is active between [ the minimum value given in the time interval - the date when the state is no longer active ]
-                    interval_state_active = self.calendar[index + 1]['date'] - self.time_interval[0]
-                # if the state is active between the given time interval
-                if self.time_interval[0]<= self.calendar[index]['date'] < self.calendar[index +1]['date'] <= self.time_interval[1]:
-                    interval_state_active = self.calendar[index + 1]['date'] - self.calendar[index]['date']
-                # if the state is active between a date greater than the minimum bound or value and a value that's greater
-                # than the maximum bound of the given time interval
-                if self.time_interval[0] <= self.calendar[index]['date'] <= self.time_interval[1] < self.calendar[index + 1]['date']:
-                    # state is active on [ the start date when the state is being active - maximum bound ]
-                    interval_state_active = self.time_interval[1] - self.calendar[index]['date']
-                # each state has it's own probability, each time we face that state, with add the corresponding interval time of being active
-                # we add that date as long as we're going until the end of the simulation
-                # this is not the real probability for now, it will be calculated later, for now we're using the same variable for adding the dates
-                self.state_probabilities[c['next_state']] += interval_state_active
-            # after collecting data and counting the probabilities of state activity status
-            for state in self.state_probabilities:
-                # we now calculate the probabilities, by dividing each value calculated previously ( sum intervals where each state was active ) by the
-                # subtracting the max bound by the min bound
-                self.state_probabilities[state] = self.state_probabilities[state]/(self.time_interval[1] - self.time_interval[0])
-                # for statistical use, as long as we go through the number of simulation, we add the calculated probability
-                # i.e : we have 100 simulation, the sigma ( sum of probabilities ) will be the sum of probabilities 100 times
-                # note that each state has it's own probability
-                self.sigma_probabilities[state] += self.state_probabilities[state]
-            # still inside the simulation, iterating through calculated occurrence of each event
-            for event in self.debits:
-                # calculate the debit by dividing number of occurrence of each event by T2 - T1
-                self.debits[event] = self.debits[event] / (self.time_interval[1] - self.time_interval[0])
-                # while we're inside the main loop ( number of experiences, simulations ) we add the calculated debit
-                # that corresponds to a particular event to the new one ( we build a sum of debits for each event)
-                self.sigma_debits[event] += self.debits[event]
+            # call the analysis function to make calculations linked to probabilities and debits
+            analyse = analysis(self.calendar, self.time_interval, self.debits, self.sigma_debits, self.sigma_probabilities, self.state_probabilities)
+            self.debits = analyse[0]
+            self.sigma_debits = analyse[1]
+            self.sigma_probabilities = analyse[2]
+            self.state_probabilities = analyse[3]
         # by the end of all simulations
-        for state in self.sigma_probabilities:
-            # we calculate the final probability of each state by dividing the sigma by the number of simulations
-            self.state_probabilities[state] = round((self.sigma_probabilities[state]/self.number_of_experiences),4)
-        # by the end the simulations
-        for single_sigma_debit in self.sigma_debits:
-            # dividing the sum of debits of each event by the number of experiences to get a new debit
-            self.debits[single_sigma_debit] = round(self.sigma_debits[single_sigma_debit]/self.number_of_experiences,3)
-        # get current directory path and write a file of the name probability.txt to show the calculated probabilities
-        file_output = open(str(os.path.dirname(os.path.realpath(__file__))) + "/probability.txt", "w")
-        file_output.write(str(datetime.datetime.now()) + "\n" + "P[ T1 < t < T2] (State X) = Probability" + "\n")
-        # initializing this list that represent the x_axis of the chart ( x axis will holds the set of states )
-        x_axis_data = []
-        # each state has it's own probability, and this probability will be held by the y axis
-        y_axis_data = []
-        # showing the probabilities in two different ways :
-        # first way : display it in a nice graphical chart by generating an html file
-        # second way : write probabilities in an output file
-        for state in self.state_probabilities:
-            # add each state to the x axis
-            x_axis_data.append(state)
-            # add the corresponding probability of that state to the y axis
-            y_axis_data.append(self.state_probabilities[state])
-            # write the probabilities on the probability.txt output file
-            file_output.write("P[" + str(self.time_interval[0]) + " < t < " + str(self.time_interval[1]) + "] (" + str(state) + ") = " + str(self.state_probabilities[state]) + "\n")
-        # generating the file and open it automatically by setting up the auto_open to True
-        # plotly.offline.plot({
-        #     "data": [go.Scatter(x=x_axis_data, y=y_axis_data)],
-        #     "layout": go.Layout(title="Probability that each state was active between the time interval : " + str(self.start.time_interval) + " under " + str(self.number_of_experiences)+" simulation")
-        # }, auto_open=True)
-        # output steps of simulation in a file
+        analysis_output_values = analysis_output(self.debits,self.sigma_debits,self.sigma_probabilities,self.state_probabilities,self.time_interval,self.number_of_experiences)
+        self.debits = analysis_output_values[0]
+        self.sigma_debits = analysis_output_values[1]
+        self.sigma_probabilities = analysis_output_values[2]
+        self.state_probabilities = analysis_output_values[3]
         simulator.output_simulation_details()
 
         for transition in self.transitions:
@@ -204,6 +144,7 @@ class InfiniteModel:
             print(str(element) + ": " + str(self.gamma[element]))
         for c in self.calendar:
             print(c)
+        print(self.debits)
 
 
 if __name__ == "__main__":
