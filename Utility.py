@@ -303,4 +303,4 @@ def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabiliti
         file_output.write(
             "P[" + str(time_interval[0]) + " < t < " + str(time_interval[1]) + "] (" + str(state) + ") = " + str(
                 state_probabilities[state]) + "\n")
-    return debits, sigma_debits, sigma_probabilities, state_probabilities
+    return debits, sigma_debits, sigma_probabilities, state_probabilities, x_axis_data,y_axis_data
