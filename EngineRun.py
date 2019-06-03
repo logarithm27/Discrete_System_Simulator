@@ -167,7 +167,19 @@ class Engine:
         for line in HTML:
             file.write(line)
         file.close()
-        output_simulation_details(model.steps,calendar)
+        file_steps = open(str(os.path.dirname(os.path.realpath(__file__))) + "/steps.txt", "w")
+        file_calendar = open(str(os.path.dirname(os.path.realpath(__file__))) + "/calendar.txt", "w")
+        # write the date (help to know the time of program execution )
+        file_calendar.write(str(datetime.datetime.now()) + "\n")
+        file_steps.write(str(datetime.datetime.now()) + "\n")
+        # each element in the steps list represent a step or a line
+        for s in model.steps:
+            # write steps line by line
+            file_steps.write(s)
+        file_steps.close()
+        for c in calendar:
+            file_calendar.write(str(c) + "\n")
+        file_calendar.close()
 
 def main():
     engine = Engine()
