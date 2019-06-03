@@ -23,6 +23,8 @@ class Model:
         self.sigma_debits = {}
         self.state_probabilities = {}
         self.sigma_probabilities = {}
+        self.x_axis_data = []
+        self.y_axis_data = []
         for event in self.events:
             self.debits[event] = 0
             self.sigma_debits[event] = 0
@@ -38,8 +40,6 @@ class Model:
             self.simulate_simple_way()
         elif which_method == "hard":
             self.simulate()
-        self.x_axis_data = None
-        self.y_axis_data = None
         for c in self.calendar:
             print(c)
         print(self.debits)
@@ -74,7 +74,7 @@ class Model:
             # by the end of all simulations
             analysis_output_values = analysis_output(self.debits, self.sigma_debits, self.sigma_probabilities,
                                                      self.state_probabilities, self.time_interval,
-                                                     self.number_of_experiences)
+                                                     self.number_of_experiences, self.x_axis_data, self.y_axis_data)
             self.debits = analysis_output_values[0]
             self.sigma_debits = analysis_output_values[1]
             self.sigma_probabilities = analysis_output_values[2]
@@ -140,6 +140,24 @@ class Model:
                                   'next_state': self.next_state_x_prime,
                                   'clock': self.min_clock_y_star,
                                   'date': self.next_event_date_t_prime})
+        analyse = analysis(self.calendar, [self.calendar[0]['date'], self.calendar[-1]['date']], self.debits,
+                           self.sigma_debits,
+                           self.sigma_probabilities, self.state_probabilities)
+        self.debits = analyse[0]
+        self.sigma_debits = analyse[1]
+        self.sigma_probabilities = analyse[2]
+        self.state_probabilities = analyse[3]
+        # by the end of all simulations
+        analysis_output_values = analysis_output(self.debits, self.sigma_debits, self.sigma_probabilities,
+                                                 self.state_probabilities,
+                                                 [self.calendar[0]['date'], self.calendar[-1]['date']],
+                                                 self.number_of_experiences, self.x_axis_data, self.y_axis_data)
+        self.debits = analysis_output_values[0]
+        self.sigma_debits = analysis_output_values[1]
+        self.sigma_probabilities = analysis_output_values[2]
+        self.state_probabilities = analysis_output_values[3]
+        self.x_axis_data = analysis_output_values[4]
+        self.y_axis_data = analysis_output_values[5]
 
 
 if __name__ == '__main__':

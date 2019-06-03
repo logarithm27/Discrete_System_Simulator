@@ -16,7 +16,6 @@ class Engine:
         x_axes_prob = []
         y_axes_prob = []
         calendar = []
-        choice = None
         date_simulation = datetime.datetime.now()
         plot_title = str(date_simulation.strftime('Timing graph simulation of %d, %b %Y, %X'))
         if int(choice_automaton) == 2:
@@ -24,14 +23,11 @@ class Engine:
             calendar = model.calendar
             x_axes_prob = model.x_axis_data
             y_axes_prob = model.y_axis_data
-            print(y_axes_prob)
-            choice = INFINITE
         elif int(choice_automaton) == 1:
             model = Model()
             calendar = model.calendar
             x_axes_prob = model.x_axis_data
             y_axes_prob = model.y_axis_data
-            choice = FINITE
 
         calendar_without_collisions = []
         for index, c in enumerate(calendar[:-1]):
