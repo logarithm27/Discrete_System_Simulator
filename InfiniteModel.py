@@ -51,11 +51,15 @@ class InfiniteModel:
         self.state_probabilities = {}
         # sigma is the sum of probabilities of each event ( it's a dictionary, the keys are states, the values are the sum )
         self.sigma_probabilities = {}
+        self.x_axis_data = []
+        self.y_axis_data = []
         # get the calendar
         self.calendar = []
         # begin the simulation
         self.simulate()
         self.time_execution = 0
+        # attributes that will be useful for outputting probabilities charts
+
 
     # function to build the infinite automaton after generating the infinite states in
     # the build_infinite_states function
@@ -131,13 +135,14 @@ class InfiniteModel:
             self.sigma_probabilities = analyse[2]
             self.state_probabilities = analyse[3]
         # by the end of all simulations
-        analysis_output_values = analysis_output(self.debits,self.sigma_debits,self.sigma_probabilities,self.state_probabilities,self.time_interval,self.number_of_experiences)
+        analysis_output_values = analysis_output(self.debits,self.sigma_debits,self.sigma_probabilities,self.state_probabilities,self.time_interval,self.number_of_experiences, self.x_axis_data, self.y_axis_data)
         self.debits = analysis_output_values[0]
         self.sigma_debits = analysis_output_values[1]
         self.sigma_probabilities = analysis_output_values[2]
         self.state_probabilities = analysis_output_values[3]
+        self.x_axis_data = analysis_output_values[4]
+        self.y_axis_data = analysis_output_values[5]
         simulator.output_simulation_details()
-
         for transition in self.transitions:
             print(transition)
         for element in self.gamma:
@@ -145,6 +150,7 @@ class InfiniteModel:
         for c in self.calendar:
             print(c)
         print(self.debits)
+
 
 
 if __name__ == "__main__":

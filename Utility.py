@@ -275,7 +275,7 @@ def analysis(simulator_calendar, time_interval, debits, sigma_debits, sigma_prob
             return debits, sigma_debits,sigma_probabilities, state_probabilities
 
 # by the end of all simulations
-def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabilities, time_interval, number_of_experiences):
+def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabilities, time_interval, number_of_experiences, x_axis_data, y_axis_data):
     for state in sigma_probabilities:
         # we calculate the final probability of each state by dividing the sigma by the number of simulations
         state_probabilities[state] = round((sigma_probabilities[state] / number_of_experiences), 4)
@@ -286,10 +286,6 @@ def analysis_output(debits, sigma_debits, sigma_probabilities, state_probabiliti
     # get current directory path and write a file of the name probability.txt to show the calculated probabilities
     file_output = open(str(os.path.dirname(os.path.realpath(__file__))) + "/probability.txt", "w")
     file_output.write(str(datetime.datetime.now()) + "\n" + "P[ T1 < t < T2] (State X) = Probability" + "\n")
-    # initializing this list that represent the x_axis of the chart ( x axis will holds the set of states )
-    x_axis_data = []
-    # each state has it's own probability, and this probability will be held by the y axis
-    y_axis_data = []
     # showing the probabilities in two different ways :
     # first way : display it in a nice graphical chart by generating an html file
     # second way : write probabilities in an output file

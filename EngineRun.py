@@ -13,6 +13,8 @@ class Engine:
         print("1- Simulate finite automaton")
         print("2- Simulate Infinite automaton")
         choice_automaton = input("option 1 or 2 : ")
+        x_axes_prob = []
+        y_axes_prob = []
         calendar = []
         choice = None
         date_simulation = datetime.datetime.now()
@@ -20,10 +22,15 @@ class Engine:
         if int(choice_automaton) == 2:
             model = InfiniteModel()
             calendar = model.calendar
+            x_axes_prob = model.x_axis_data
+            y_axes_prob = model.y_axis_data
+            print(y_axes_prob)
             choice = INFINITE
         elif int(choice_automaton) == 1:
             model = Model()
             calendar = model.calendar
+            x_axes_prob = model.x_axis_data
+            y_axes_prob = model.y_axis_data
             choice = FINITE
 
         calendar_without_collisions = []
@@ -35,13 +42,27 @@ class Engine:
         calendar_without_collisions.append(calendar[-1])
 
         calendar = calendar_without_collisions
-        print('without collisions')
-        for c in calendar:
-            print(c)
-
-        states = []
         x_axes_states = []
         y_axes_states = []
+        probabilities = None
+        states = []
+        if len(x_axes_prob) > 0  and len(y_axes_prob) > 0:
+            x_axes_to_string = []
+            for state in x_axes_prob:
+                x_axes_to_string.append("'"+str(state)+"'")
+            x_axes_prob = x_axes_to_string
+            HTML.append("var probabilities = \n")
+            probabilities = {
+                'x': x_axes_prob,
+                'y': y_axes_prob,
+                'type': '|scatter|'
+            }
+            probabilities = str(probabilities).replace("'", "")
+            probabilities = probabilities.replace("|", "'")
+            HTML.append(probabilities)
+            HTML.append(";\n")
+            HTML.append("var data2 = [probabilities];")
+
         x_axes_date_event_triggering = []
         x_axes_dates = []
         annotations = []
@@ -124,11 +145,7 @@ class Engine:
             )
         first_date = str(calendar[1]['date'])
         second_date = str(calendar[2]['date'])
-        file = None
-        if choice == INFINITE:
-            file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/calendar.html", "w")
-        if choice == FINITE:
-            file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/timing_graph.html", "w")
+        file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/timing_graph.html", "w")
         HTML.append("var data = [states_positions,events_positions];\nvar layout = { title:{text:'" + str(
             plot_title) + "',font:{family:'Candara Bold Italic', size:28}, xref: 'paper', x: 0.05,},hovermode: 'x', xaxis: { autorange:false, range: [" + first_date + "," + second_date + "]},yaxis: { autorange: true, showgrid: false, zeroline: false, showline: false, autotick: true, ticks: '', showticklabels: false}, showlegend: false,\n")
         HTML[-1] = HTML[-1] + "annotations:["
@@ -137,7 +154,10 @@ class Engine:
             c = c.replace("|", "'")
             HTML[-1] = HTML[-1] + c + ",\n"
         HTML[-1] = HTML[
-                       -1] + "]};\nPlotly.newPlot('myDiv', data, layout,{displaylogo: false}, {showSendToCloud:true});\n</script>\n</body>"
+                       -1] + "]};\nPlotly.newPlot('timing_graph', data, layout,{displaylogo: false}, {showSendToCloud:true});\n"
+        if probabilities is not None:
+            HTML[-1] = HTML[-1] + "Plotly.newPlot('probabilities', data2,{displaylogo: false}, {showSendToCloud:true});\n"
+        HTML[-1] = HTML[-1] + "</script>\n</body>"
 
         for line in HTML:
             file.write(line)

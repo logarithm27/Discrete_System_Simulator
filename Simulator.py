@@ -174,3 +174,4 @@ class Simulator:
         for s in self.steps:
             # write steps line by line
             file.write(s)
+        file.close()
