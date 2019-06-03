@@ -152,7 +152,7 @@ class Engine:
                        -1] + "]};\nPlotly.newPlot('timing_graph', data, layout,{displaylogo: false}, {showSendToCloud:true});\n"
         if probabilities is not None:
             HTML[-1] = HTML[-1] + "Plotly.newPlot('probabilities', data2,{displaylogo: false}, {showSendToCloud:true});\n"
-        HTML[-1] = HTML[-1] + "</script>\n</body>"
+        HTML[-1] = HTML[-1] + "function hideLogo() { document.getElementById('symbol').style.visibility = 'hidden';}</script>\n</body>"
 
         for line in HTML:
             file.write(line)
