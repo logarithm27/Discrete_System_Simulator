@@ -43,13 +43,12 @@ class Engine:
         probabilities = None
         states = []
         if len(x_axes_prob) > 0  and len(y_axes_prob) > 0:
-            x_axes_to_string = []
+            x_axes_to_string_prob = []
             for state in x_axes_prob:
-                x_axes_to_string.append("'"+str(state)+"'")
-            x_axes_prob = x_axes_to_string
+                x_axes_to_string_prob.append("'state = "+str(state)+"'")
             HTML.append("var probabilities = \n")
             probabilities = {
-                'x': x_axes_prob,
+                'x': x_axes_to_string_prob,
                 'y': y_axes_prob,
                 'type': '|scatter|'
             }
