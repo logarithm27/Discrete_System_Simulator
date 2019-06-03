@@ -81,7 +81,7 @@ class Model:
             self.state_probabilities = analysis_output_values[3]
             self.x_axis_data = analysis_output_values[4]
             self.y_axis_data = analysis_output_values[5]
-            simulator.output_simulation_details()
+            self.steps = simulator.steps
         else:
             simulator = Simulator(self.transitions['initial_state'], self.durations, self.gamma, self.transitions['transitions'], NON_RANDOM, None, None, None)
             simulator.simulate()
@@ -102,8 +102,7 @@ class Model:
             self.state_probabilities = analysis_output_values[3]
             self.x_axis_data = analysis_output_values[4]
             self.y_axis_data = analysis_output_values[5]
-            print(self.y_axis_data)
-            simulator.output_simulation_details()
+            self.steps = simulator.steps
 
     # updating the clock value each time and searching for y* and the arg of y*
     def simulate(self):

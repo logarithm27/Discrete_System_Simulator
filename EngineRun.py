@@ -16,6 +16,7 @@ class Engine:
         x_axes_prob = []
         y_axes_prob = []
         calendar = []
+        debits = ""
         date_simulation = datetime.datetime.now()
         plot_title = str(date_simulation.strftime('Timing graph simulation of %d, %b %Y, %X'))
         if int(choice_automaton) == 2:
@@ -28,6 +29,10 @@ class Engine:
             calendar = model.calendar
             x_axes_prob = model.x_axis_data
             y_axes_prob = model.y_axis_data
+        for event in model.debits:
+            debits += "N("+str(event)+") = " + str(model.debits[event])+"  |  "
+
+        HTML[6] = HTML[6].replace("DEBITS","Debits : "+ debits)
 
         calendar_without_collisions = []
         for index, c in enumerate(calendar[:-1]):
@@ -42,7 +47,12 @@ class Engine:
         y_axes_states = []
         probabilities = None
         states = []
+        if len(x_axes_prob) == 0  and len(y_axes_prob) == 0:
+            HTML[8] = HTML[8].replace("SIMUL", "There's no probabilities chart to show")
         if len(x_axes_prob) > 0  and len(y_axes_prob) > 0:
+            if len(model.time_interval) == 0:
+                model.time_interval = [calendar[0]['date'],calendar[-1]['date']]
+            HTML[8] = HTML[8].replace("SIMUL", "Probabilities of states' activeness in the interval " + str(model.time_interval)+" under " + str(model.number_of_experiences) + " simulation")
             x_axes_to_string_prob = []
             for state in x_axes_prob:
                 x_axes_to_string_prob.append("'state = "+str(state)+"'")
@@ -157,6 +167,7 @@ class Engine:
         for line in HTML:
             file.write(line)
         file.close()
+        output_simulation_details(model.steps,calendar)
 
 def main():
     engine = Engine()

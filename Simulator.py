@@ -163,15 +163,4 @@ class Simulator:
         else :
             self.steps.append("Clocks are generated randomly" + "\n")
 
-    # function responsible of output steps and details after end of simulation
-    def output_simulation_details(self):
-        # open the current program directory and create a file of the name steps.txt with 'w' mode which stand for create a file if
-        # doesn't exist, or overwrite it if it already exist
-        file = open(str(os.path.dirname(os.path.realpath(__file__)))+"/steps.txt","w")
-        # write the date (help to know the time of program execution )
-        file.write(str(datetime.datetime.now())+"\n")
-        # each element in the steps list represent a step or a line
-        for s in self.steps:
-            # write steps line by line
-            file.write(s)
-        file.close()
+

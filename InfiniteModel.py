@@ -11,6 +11,7 @@ from Utility import *
 # before calling build_state_machine, because we can't build a state machine without having the entire necessary list of states
 class InfiniteModel:
     def __init__(self):
+        self.steps = []
         # when we call the constructor of this class outside, we begin by instantiating the Infinite Model Input Class
         # which is responsible for the showing messages and interacting with the user on the console
         # after interacting with the user, he normally should gave a file to the program
@@ -142,7 +143,7 @@ class InfiniteModel:
         self.state_probabilities = analysis_output_values[3]
         self.x_axis_data = analysis_output_values[4]
         self.y_axis_data = analysis_output_values[5]
-        simulator.output_simulation_details()
+        self.steps = simulator.steps
         for transition in self.transitions:
             print(transition)
         for element in self.gamma:
