@@ -37,11 +37,11 @@ class InfiniteModel:
         # call it to generate states
         self.build_infinite_states()
         # building the infinite automaton and memorizing the transitions of that infinite model in self.transitions variable
-        self.transitions = self.build_state_machine()
+        self.finite_state_machine = self.build_state_machine()
         # convert states from tuples to string list
         self.states = list(map(str,self.states))
         # get gamma
-        self.gamma = set_of_possible_events_of_all_states(self.states, self.transitions)
+        self.gamma = set_of_possible_events_of_all_states(self.states, self.finite_state_machine)
         # field to memorize events debit
         self.debits = {}
         # field able to make the sum of debits through the number of simulation ( at the end this sigma or sum that corresponds to a particular
@@ -112,7 +112,7 @@ class InfiniteModel:
 
     # begin the simulation
     def simulate(self):
-        for transition in self.transitions:
+        for transition in self.finite_state_machine:
             print(transition)
         # initializing variables that will be used to calculate event's debits and states's probabilities
         for event in self.events:
@@ -124,7 +124,7 @@ class InfiniteModel:
         # looping until we reach the maximum number of simulation we want to do
         for counter in range(self.number_of_experiences):
             # begin the simulation that help us to generate the timing graph by instantiate a Simulator Object
-            simulator = Simulator(self.states[0], None, self.gamma, self.transitions, RANDOM, self.time_interval[1], self.events, self.lambdas)
+            simulator = Simulator(self.states[0], None, self.gamma, self.finite_state_machine, RANDOM, self.time_interval[1], self.events, self.lambdas)
             # calling simulate function (the engine of the simulation) from the Simulator class after it was instantiated
             simulator.simulate()
             # each time we simulate, we get the calendar generated after this simulation
@@ -144,7 +144,7 @@ class InfiniteModel:
         self.x_axis_data = analysis_output_values[4]
         self.y_axis_data = analysis_output_values[5]
         self.steps = simulator.steps
-        for transition in self.transitions:
+        for transition in self.finite_state_machine:
             print(transition)
         for element in self.gamma:
             print(str(element) + ": " + str(self.gamma[element]))
