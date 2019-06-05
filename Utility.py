@@ -31,7 +31,7 @@ def asking_for_input(ask_for_number_of_data, ask_for_data):
             # if the number of states entered previously by the user is less than or equal to 1
             while number_of_data <= 1:
                 # we ask the user to put a valid number over and over again until he enter a valid number of states
-                # for example : we can't have an automaton with one state (maybe we can but it's useless)
+                # for example : we can't have an automaton with one state (maybe we can but if there's a self event linked to it)
                 print("invalid model, try again")
                 number_of_data = int(input(ask_for_number_of_data))
         # if we're asking the user about the events
