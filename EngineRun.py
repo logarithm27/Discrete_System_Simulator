@@ -167,8 +167,8 @@ class Engine:
         for line in HTML:
             file.write(line)
         file.close()
-        file_steps = open(str(os.path.dirname(os.path.realpath(__file__))) + "/steps"+str(datetime.datetime.now()).replace("-","_").replace(":","_")+"txt", "w")
-        file_calendar = open(str(os.path.dirname(os.path.realpath(__file__))) + "/calendar" + str(datetime.datetime.now()).replace("-","_").replace(":","_")+"txt", "w")
+        file_steps = open(str(os.path.dirname(os.path.realpath(__file__))) + "/steps"+str(datetime.datetime.now()).replace("-","_").replace(":","_")+".txt", "w")
+        file_calendar = open(str(os.path.dirname(os.path.realpath(__file__))) + "/calendar" + str(datetime.datetime.now()).replace("-","_").replace(":","_")+".txt", "w")
         # write the date (help to know the time of program execution )
         file_calendar.write(str(datetime.datetime.now()) + "\n")
         file_steps.write(str(datetime.datetime.now()) + "\n")
