@@ -150,7 +150,7 @@ class Engine:
             )
         first_date = str(calendar[1]['date'])
         second_date = str(calendar[2]['date'])
-        file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/timing_graph.html", "w")
+        file = open(str(os.path.dirname(os.path.realpath(__file__))) + "/timing_graph_"+str(datetime.datetime.now()).replace("-","_").replace(":","_")+".html", "w")
         HTML.append("var data = [states_positions,events_positions];\nvar layout = { title:{text:'" + str(
             plot_title) + "',font:{family:'Candara Bold Italic', size:28}, xref: 'paper', x: 0.05,},hovermode: 'x', xaxis: { autorange:false, range: [" + first_date + "," + second_date + "]},yaxis: { autorange: true, showgrid: false, zeroline: false, showline: false, autotick: true, ticks: '', showticklabels: false}, showlegend: false,\n")
         HTML[-1] = HTML[-1] + "annotations:["
