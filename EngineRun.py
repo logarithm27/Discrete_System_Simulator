@@ -1,6 +1,6 @@
 from InfiniteModel import *
 from Model import *
-from javascript_generator import *
+from html_generator import *
 import datetime
 
 INFINITE = 0
