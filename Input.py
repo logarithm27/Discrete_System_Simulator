@@ -52,12 +52,10 @@ class Input:
                 self.lambdas[event] = []
             print("Enter the parameter Lambda for each event:")
             for event in self.events:
-                while not self.input_lambdas(event):
-                    self.input_lambdas(event)
+                self.input_lambdas(event)
             self.set_of_durations = random_durations_generator(self.events,self.lambdas)
             self.time_interval_input()
-            while not self.input_number_of_simulation():
-                self.input_number_of_simulation()
+            self.input_number_of_simulation()
 
     def input_number_of_simulation(self):
         try:
@@ -65,18 +63,16 @@ class Input:
             while self.number_of_simulation < 0 or self.number_of_simulation == 0:
                 print("Invalid number, try again")
                 self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
-                return False
-            return True
         except ValueError or None or TypeError :
-            return False
+            print("Invalid number, try again")
+            self.input_number_of_simulation()
 
     def input_lambdas(self, event):
         try:
             self.lambdas[event].append(float(input("Lambda(" + str(event) + ") : ")))
-            return True
         except ValueError or SyntaxError or None or TypeError:
             print("Invalid input, try again")
-            return False
+            self.input_lambdas(event)
 
 
     def method_input(self):
