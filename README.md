@@ -1,3 +1,2 @@
-# Discrete_System_Simulator
-Model for discrete system events
-Description will be available as soon as the project is done 
+# Discrete System Simulator
+You must include the javascript file plotly.js with other python files in order to visualize the timing graph and the probabilities chart without any issue. 
