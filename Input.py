@@ -54,7 +54,7 @@ class Input:
             for event in self.events:
                 try:
                     self.lambdas[event].append(float (input("Lambda("+str(event)+") : ")))
-                except None or SyntaxError or ValueError or TypeError:
+                except ValueError or SyntaxError or None or TypeError:
                     print("Invalid input, Try again")
                     self.durations_input(random)
             self.set_of_durations = random_durations_generator(self.events,self.lambdas)
@@ -64,7 +64,7 @@ class Input:
                 while self.number_of_simulation < 0 or self.number_of_simulation == 0:
                     print("Invalid number, try again")
                     self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
-            except None or SyntaxError or ValueError or TypeError:
+            except ValueError or SyntaxError or None or TypeError:
                 print("Invalid number, try again")
                 self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
 
@@ -92,7 +92,7 @@ class Input:
             while len(self.time_interval) != 2 :
                 print("You must enter only two positive integer values, try again")
                 self.time_interval = list(map(int, input("Enter a time interval (i.e : 100,200) : ").split(',')))
-        except None or SyntaxError or ValueError or TypeError:
+        except ValueError or SyntaxError or None or TypeError:
             print("Invalid input")
             self.time_interval_input()
 
