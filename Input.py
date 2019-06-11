@@ -52,21 +52,31 @@ class Input:
                 self.lambdas[event] = []
             print("Enter the parameter Lambda for each event:")
             for event in self.events:
-                try:
-                    self.lambdas[event].append(float (input("Lambda("+str(event)+") : ")))
-                except ValueError or SyntaxError or None or TypeError:
-                    print("Invalid input, Try again")
-                    self.durations_input(random)
+                while not self.input_lambdas(event):
+                    self.input_lambdas(event)
             self.set_of_durations = random_durations_generator(self.events,self.lambdas)
             self.time_interval_input()
-            try:
-                self.number_of_simulation = int (input("Enter number of simulation you want to do : "))
-                while self.number_of_simulation < 0 or self.number_of_simulation == 0:
-                    print("Invalid number, try again")
-                    self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
-            except ValueError or SyntaxError or None or TypeError:
+            while not self.input_number_of_simulation():
+                self.input_number_of_simulation()
+
+    def input_number_of_simulation(self):
+        try:
+            self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
+            while self.number_of_simulation < 0 or self.number_of_simulation == 0:
                 print("Invalid number, try again")
                 self.number_of_simulation = int(input("Enter number of simulation you want to do : "))
+                return False
+            return True
+        except ValueError or None or TypeError :
+            return False
+
+    def input_lambdas(self, event):
+        try:
+            self.lambdas[event].append(float(input("Lambda(" + str(event) + ") : ")))
+            return True
+        except ValueError or SyntaxError or None or TypeError:
+            print("Invalid input, try again")
+            return False
 
 
     def method_input(self):
