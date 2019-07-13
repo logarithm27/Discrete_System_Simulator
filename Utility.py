@@ -14,9 +14,9 @@ RANDOM = 1
 # because we're asking the user to give multiple information about the model he wants to simulate
 # we'll call this function multiple times in the Model class,
 # hence, instead of repeating the code, we'll use this function with two parameters
-# the first parameter is the string message which should be displayed to ask the user of the number of states or the number of events in his model
+# the first parameter is the string message which should be displayed to ask the user for the number of states or the number of events in his model
 # the second parameter asks the user to enter the enter the data related to the model, i.e : enter the names of the events, or the name of states
-# note that because we're asking the user of the number of states and events, we're about simulating a FINITE AUTOMATON, the input of the Infinite systems
+# note that because we're asking the user for the number of states and events, we're about simulating a FINITE AUTOMATON, the input of the Infinite systems
 # is on the InfiniteModelsInput Class
 
 def asking_for_input(ask_for_number_of_data, ask_for_data):
