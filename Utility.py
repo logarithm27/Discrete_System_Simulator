@@ -1,5 +1,5 @@
 # Utility class offers a number of functions
-# each function has it's own task and runs a particular algorithm useful in another class
+# each function has its own task and runs a particular algorithm useful in another class
 import datetime
 import os
 import random
