@@ -13,7 +13,7 @@ class InfiniteModel:
     def __init__(self):
         self.steps = []
         # when we call the constructor of this class outside, we begin by instantiating the Infinite Model Input Class
-        # which is responsible for the showing messages and interacting with the user on the console
+        # which is responsible for showing messages and interacting with the user on the console
         # after interacting with the user, he normally should gave a file to the program
         self.start = InfiniteModelInput()
         # get events
