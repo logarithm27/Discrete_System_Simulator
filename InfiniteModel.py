@@ -30,7 +30,7 @@ class InfiniteModel:
         self.max_bounds = self.start.max_bounds
         # get the min bounds (each state shouldn't be below it )
         self.min_bounds = self.start.min_bounds
-        # get number of experience of number of simulations to do ( useful for calculating debits and probabilities )
+        # get number of experience or number of simulations to do ( useful for calculating debits and probabilities )
         self.number_of_experiences = self.start.number_of_experiences
         # get the time interval which will be useful to calculate states' activity probability in that interval
         self.time_interval = self.start.time_interval
