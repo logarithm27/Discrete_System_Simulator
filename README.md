@@ -19,12 +19,13 @@ Plotly Library : https://plot.ly/
 # Classic Queue System represented as Infinite Model that we can simulate 
 ![Screenshot_6](https://user-images.githubusercontent.com/34900477/67153721-92c47e80-f2ee-11e9-9def-61ecd27d73c1.png)
 
-# Simulator in Action 
+# Simulator in Action (Input phase)
 
 ![Screenshot_3](https://user-images.githubusercontent.com/34900477/67153726-a5d74e80-f2ee-11e9-8cae-88454a481eb5.png)
+
+# Simulator in Action (Output phase)
 ![Screenshot_4](https://user-images.githubusercontent.com/34900477/67153727-a5d74e80-f2ee-11e9-9944-fd0675d49507.png)
 ![Screenshot_5](https://user-images.githubusercontent.com/34900477/67153728-a66fe500-f2ee-11e9-8b21-8e65b5c05d56.png)
-![Screenshot_2](https://user-images.githubusercontent.com/34900477/67153729-a66fe500-f2ee-11e9-9308-39c913a592c6.png)
 
 
 
