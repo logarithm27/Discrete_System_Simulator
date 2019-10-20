@@ -10,4 +10,9 @@ About data structures : https://docs.python.org/2/library/stdtypes.html#dict
 
 Plotly Library : https://plot.ly/
 
+# Simulation Process
+
+
+
+
 
