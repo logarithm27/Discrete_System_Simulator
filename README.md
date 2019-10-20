@@ -11,6 +11,7 @@ About data structures : https://docs.python.org/2/library/stdtypes.html#dict
 Plotly Library : https://plot.ly/
 
 # Simulation Process
+![structure_sim](https://user-images.githubusercontent.com/34900477/67153649-6825f600-f2ed-11e9-8870-03238f43676c.png)
 
 
 
