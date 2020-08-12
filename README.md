@@ -1,5 +1,5 @@
 # Discrete System Simulator
-You must include the Javascript file plotly.js in order to display the timing graph and the probabilities chart without any issue. 
+You must include the Javascript file plotly.js in order to display the timing graph and probabilities chart without any issue. 
 
 # References 
 Discrete System events Master's course of Paris-Sacaly University by Prof. Jean Marc Delosme : https://www.ibisc.univ-evry.fr/~delosme/M1_SED/index.html 
