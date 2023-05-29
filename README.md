@@ -16,7 +16,7 @@ Plotly Library : https://plot.ly/
 # Matching between data structure and Timing Graph
 ![calendar](https://user-images.githubusercontent.com/34900477/67153682-031ed000-f2ee-11e9-981d-0c7735c7fdc1.png)
 
-# Classic Queue System represented as Infinite Model that we can simulate 
+# Classic Queue System represented as an infinite Model that we can simulate 
 ![Screenshot_6](https://user-images.githubusercontent.com/34900477/67153721-92c47e80-f2ee-11e9-9def-61ecd27d73c1.png)
 
 # Simulator in Action (Input phase)
